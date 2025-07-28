@@ -61,7 +61,8 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                            class="fas fa-bars"></i></a>
                 </li>
             </ul>
 
@@ -86,10 +87,10 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar elevation-4 sidebar-light-primary">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
+            <a href="/dashboard" class="brand-link">
                 <img src="{{ asset('assets') }}/dist/img/preneur.png" alt="AdminLTE Logo"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">PRENEUR OFFICIAL</span>
+                <span class="brand-text font-weight-light">PRENEUR</span>
             </a>
 
             <!-- Sidebar -->
@@ -121,228 +122,231 @@
                             </a>
                         </li>
                         @if (auth()->user()->role == 'kasir')
-                           <li class="nav-item">
-                                    <a href="/pelanggan"
-                                        class="nav-link {{ request()->segment(1) == 'pelanggan' ? 'active' : '' }}">
-                                        <i class="nav-icon fas fa-user"></i>
-                                        <p>Data Pelanggan</p>
-                                    </a>
-                                </li>
-                        <li class="nav-item">
-                            <a href="/penjualan/{{ no_invoice() }}"
-                                class="nav-link {{ request()->segment(1) == 'penjualan' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-chart-bar"></i>
-                                <p>
-                                    penjualan
-                                </p>
-                            </a>
-                        </li>
-                        <li
-                            class="nav-item has-treeview {{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'menu-open' : '' }}">
-                            <a href="#"
-                                class="nav-link {{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-chart-pie"></i>
-                                <p>
-                                    Laporan
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview"
-                                style="display:{{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'block' : 'none' }}">
-                                <li class="nav-item">
-                                    <a href="/laporan/penjualan_harian"
-                                        class="nav-link {{ request()->segment(2) == 'penjualan_harian' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Penjualan Harian</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/penjualan_minggu_atau_bulan"
-                                        class="nav-link {{ request()->segment(2) == 'penjualan_minggu_atau_bulan' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Penjualan Minggu/Bulan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/keuntungan_harian"
-                                        class="nav-link {{ request()->segment(2) == 'keuntungan_harian' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Keuntungan Harian</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/keuntungan_minggu_atau_bulan"
-                                        class="nav-link {{ request()->segment(2) == 'keuntungan_minggu_atau_bulan' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Keuntungan Minggu/Bulan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/pembelian"
-                                        class="nav-link {{ request()->segment(2) == 'pembelian' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Pembelian</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/retur"
-                                        class="nav-link {{ request()->segment(2) == 'retur' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Retur Barang</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/hutang"
-                                        class="nav-link {{ request()->segment(2) == 'hutang' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Hutang</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/pengeluaran"
-                                        class="nav-link {{ request()->segment(2) == 'pengeluaran' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Pengeluaran</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/keuangan"
-                                        class="nav-link {{ request()->segment(2) == 'keuangan' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Keuangan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/stok_barang"
-                                        class="nav-link {{ request()->segment(2) == 'stok_barang' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Stok Barang</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/produk_terjual"
-                                        class="nav-link {{ request()->segment(2) == 'produk_terjual' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Produk Terjual</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                            <li class="nav-item">
+                                <a href="/pelanggan"
+                                    class="nav-link {{ request()->segment(1) == 'pelanggan' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>Data Pelanggan</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/penjualan/{{ no_invoice() }}"
+                                    class="nav-link {{ request()->segment(1) == 'penjualan' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-chart-bar"></i>
+                                    <p>
+                                        penjualan
+                                    </p>
+                                </a>
+                            </li>
+                            <li
+                                class="nav-item has-treeview {{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'menu-open' : '' }}">
+                                <a href="#"
+                                    class="nav-link {{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>
+                                        Laporan
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview"
+                                    style="display:{{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'block' : 'none' }}">
+                                    <li class="nav-item">
+                                        <a href="/laporan/penjualan_harian"
+                                            class="nav-link {{ request()->segment(2) == 'penjualan_harian' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Penjualan Harian</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/penjualan_minggu_atau_bulan"
+                                            class="nav-link {{ request()->segment(2) == 'penjualan_minggu_atau_bulan' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Penjualan Minggu/Bulan</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/keuntungan_harian"
+                                            class="nav-link {{ request()->segment(2) == 'keuntungan_harian' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Keuntungan Harian</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/keuntungan_minggu_atau_bulan"
+                                            class="nav-link {{ request()->segment(2) == 'keuntungan_minggu_atau_bulan' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Keuntungan Minggu/Bulan</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/pembelian"
+                                            class="nav-link {{ request()->segment(2) == 'pembelian' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Pembelian</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/retur"
+                                            class="nav-link {{ request()->segment(2) == 'retur' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Retur Barang</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/hutang"
+                                            class="nav-link {{ request()->segment(2) == 'hutang' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Hutang</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/pengeluaran"
+                                            class="nav-link {{ request()->segment(2) == 'pengeluaran' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Pengeluaran</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/keuangan"
+                                            class="nav-link {{ request()->segment(2) == 'keuangan' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Keuangan</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/stok_barang"
+                                            class="nav-link {{ request()->segment(2) == 'stok_barang' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Stok Barang</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/produk_terjual"
+                                            class="nav-link {{ request()->segment(2) == 'produk_terjual' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Produk Terjual</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         @endif
                         @if (auth()->user()->role == 'admin')
-                        <li
-                            class="nav-item has-treeview {{ request()->segment(1) == 'supplier' || request()->segment(1) == 'kategori' || request()->segment(1) == 'pelanggan' ? 'menu-open' : '' }}">
-                            <a href="#"
-                                class="nav-link {{ request()->segment(1) == 'supplier' || request()->segment(1) == 'kategori' || request()->segment(1) == 'pelanggan' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-list-alt"></i>
-                                <p>
-                                    Data Master
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview"
-                                style="display:{{ request()->segment(1) == 'supplier' || request()->segment(1) == 'kategori' || request()->segment(1) == 'pelanggan' ? 'block' : 'none' }}">
-                                <li class="nav-item">
-                                    <a href="/supplier"
-                                        class="nav-link {{ request()->segment(1) == 'supplier' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Supplier</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/kategori"
-                                        class="nav-link {{ request()->segment(1) == 'kategori' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kategori</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/pelanggan"
-                                        class="nav-link {{ request()->segment(1) == 'pelanggan' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Pelanggan</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li
-                            class="nav-item has-treeview {{ request()->segment(1) == 'barang' || request()->segment(1) == 'pembelian' || request()->segment(1) == 'keluar' ? 'menu-open' : '' }}">
-                            <a href="#"
-                                class="nav-link {{ request()->segment(1) == 'barang' || request()->segment(1) == 'pembelian' || request()->segment(1) == 'keluar' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-clipboard-list"></i>
-                                <p>
-                                    Data Barang
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview"
-                                style="display:{{ request()->segment(1) == 'barang' || request()->segment(1) == 'pembelian' || request()->segment(1) == 'keluar' ? 'block' : 'none' }}">
-                                <li class="nav-item">
-                                    <a href="/barang"
-                                        class="nav-link {{ request()->segment(1) == 'barang' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Barang</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/pembelian"
-                                        class="nav-link {{ request()->segment(1) == 'pembelian' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Masuk</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/keluar"
-                                        class="nav-link {{ request()->segment(1) == 'keluar' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Keluar</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/user" class="nav-link {{ request()->segment(1) == 'user' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-user"></i>
-                                <p>
-                                    User
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/penjualan/{{ no_invoice() }}"
-                                class="nav-link {{ request()->segment(1) == 'penjualan' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-chart-bar"></i>
-                                <p>
-                                    penjualan
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/hutang" class="nav-link {{ request()->segment(1) == 'hutang' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-credit-card"></i>
-                                <p>
-                                    Hutang/Piutang
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/retur" class="nav-link {{ request()->segment(1) == 'retur' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-exchange-alt"></i>
-                                <p>
-                                    Retur Barang
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/pengeluaran"
-                                class="nav-link {{ request()->segment(1) == 'pengeluaran' ? 'active' : '' }}">
-                                <i class="nav-icon far fa-calendar-alt"></i>
-                                <p>
-                                    Pengeluaran
-                                </p>
-                            </a>
-                        </li>
-                        {{-- <li class="nav-item">
+                            <li
+                                class="nav-item has-treeview {{ request()->segment(1) == 'supplier' || request()->segment(1) == 'kategori' || request()->segment(1) == 'pelanggan' ? 'menu-open' : '' }}">
+                                <a href="#"
+                                    class="nav-link {{ request()->segment(1) == 'supplier' || request()->segment(1) == 'kategori' || request()->segment(1) == 'pelanggan' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-list-alt"></i>
+                                    <p>
+                                        Data Master
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview"
+                                    style="display:{{ request()->segment(1) == 'supplier' || request()->segment(1) == 'kategori' || request()->segment(1) == 'pelanggan' ? 'block' : 'none' }}">
+                                    <li class="nav-item">
+                                        <a href="/supplier"
+                                            class="nav-link {{ request()->segment(1) == 'supplier' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Supplier</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/kategori"
+                                            class="nav-link {{ request()->segment(1) == 'kategori' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Kategori</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/pelanggan"
+                                            class="nav-link {{ request()->segment(1) == 'pelanggan' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Pelanggan</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li
+                                class="nav-item has-treeview {{ request()->segment(1) == 'barang' || request()->segment(1) == 'pembelian' || request()->segment(1) == 'keluar' ? 'menu-open' : '' }}">
+                                <a href="#"
+                                    class="nav-link {{ request()->segment(1) == 'barang' || request()->segment(1) == 'pembelian' || request()->segment(1) == 'keluar' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-clipboard-list"></i>
+                                    <p>
+                                        Data Barang
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview"
+                                    style="display:{{ request()->segment(1) == 'barang' || request()->segment(1) == 'pembelian' || request()->segment(1) == 'keluar' ? 'block' : 'none' }}">
+                                    <li class="nav-item">
+                                        <a href="/barang"
+                                            class="nav-link {{ request()->segment(1) == 'barang' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Barang</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/pembelian"
+                                            class="nav-link {{ request()->segment(1) == 'pembelian' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Masuk</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/keluar"
+                                            class="nav-link {{ request()->segment(1) == 'keluar' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Keluar</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/user"
+                                    class="nav-link {{ request()->segment(1) == 'user' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>
+                                        User
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/penjualan/{{ no_invoice() }}"
+                                    class="nav-link {{ request()->segment(1) == 'penjualan' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-chart-bar"></i>
+                                    <p>
+                                        penjualan
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/hutang"
+                                    class="nav-link {{ request()->segment(1) == 'hutang' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-credit-card"></i>
+                                    <p>
+                                        Hutang/Piutang
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/retur"
+                                    class="nav-link {{ request()->segment(1) == 'retur' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-exchange-alt"></i>
+                                    <p>
+                                        Retur Barang
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/pengeluaran"
+                                    class="nav-link {{ request()->segment(1) == 'pengeluaran' ? 'active' : '' }}">
+                                    <i class="nav-icon far fa-calendar-alt"></i>
+                                    <p>
+                                        Pengeluaran
+                                    </p>
+                                </a>
+                            </li>
+                            {{-- <li class="nav-item">
                             <a href="/transfer"
                                 class="nav-link {{ request()->segment(1) == 'transfer' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-indent"></i>
@@ -351,98 +355,97 @@
                         </p>
                         </a>
                         </li> --}}
-                        <li
-                            class="nav-item has-treeview {{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'menu-open' : '' }}">
-                            <a href="#"
-                                class="nav-link {{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-chart-pie"></i>
-                                <p>
-                                    Laporan
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview"
-                                style="display:{{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'block' : 'none' }}">
-                                <li class="nav-item">
-                                    <a href="/laporan/penjualan_harian"
-                                        class="nav-link {{ request()->segment(2) == 'penjualan_harian' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Penjualan Harian</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/penjualan_minggu_atau_bulan"
-                                        class="nav-link {{ request()->segment(2) == 'penjualan_minggu_atau_bulan' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Penjualan Minggu/Bulan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/keuntungan_harian"
-                                        class="nav-link {{ request()->segment(2) == 'keuntungan_harian' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Keuntungan Harian</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/keuntungan_minggu_atau_bulan"
-                                        class="nav-link {{ request()->segment(2) == 'keuntungan_minggu_atau_bulan' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Keuntungan Minggu/Bulan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/pembelian"
-                                        class="nav-link {{ request()->segment(2) == 'pembelian' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Pembelian</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/retur"
-                                        class="nav-link {{ request()->segment(2) == 'retur' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Retur Barang</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/hutang"
-                                        class="nav-link {{ request()->segment(2) == 'hutang' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Hutang</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/pengeluaran"
-                                        class="nav-link {{ request()->segment(2) == 'pengeluaran' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Pengeluaran</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/keuangan"
-                                        class="nav-link {{ request()->segment(2) == 'keuangan' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Keuangan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/stok_barang"
-                                        class="nav-link {{ request()->segment(2) == 'stok_barang' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Stok Barang</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/laporan/produk_terjual"
-                                        class="nav-link {{ request()->segment(2) == 'produk_terjual' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Produk Terjual</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        
+                            <li
+                                class="nav-item has-treeview {{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'menu-open' : '' }}">
+                                <a href="#"
+                                    class="nav-link {{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>
+                                        Laporan
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview"
+                                    style="display:{{ request()->segment(2) == 'penjualan_harian' || request()->segment(2) == 'penjualan_minggu_atau_bulan' || request()->segment(2) == 'keuntungan_harian' || request()->segment(2) == 'keuntungan_minggu_atau_bulan' || request()->segment(2) == 'pembelian' || request()->segment(2) == 'retur' || request()->segment(2) == 'hutang' || request()->segment(2) == 'pengeluaran' || request()->segment(2) == 'keuangan' || request()->segment(2) == 'stok_barang' || request()->segment(2) == 'produk_terjual' ? 'block' : 'none' }}">
+                                    <li class="nav-item">
+                                        <a href="/laporan/penjualan_harian"
+                                            class="nav-link {{ request()->segment(2) == 'penjualan_harian' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Penjualan Harian</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/penjualan_minggu_atau_bulan"
+                                            class="nav-link {{ request()->segment(2) == 'penjualan_minggu_atau_bulan' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Penjualan Minggu/Bulan</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/keuntungan_harian"
+                                            class="nav-link {{ request()->segment(2) == 'keuntungan_harian' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Keuntungan Harian</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/keuntungan_minggu_atau_bulan"
+                                            class="nav-link {{ request()->segment(2) == 'keuntungan_minggu_atau_bulan' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Keuntungan Minggu/Bulan</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/pembelian"
+                                            class="nav-link {{ request()->segment(2) == 'pembelian' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Pembelian</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/retur"
+                                            class="nav-link {{ request()->segment(2) == 'retur' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Retur Barang</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/hutang"
+                                            class="nav-link {{ request()->segment(2) == 'hutang' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Hutang</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/pengeluaran"
+                                            class="nav-link {{ request()->segment(2) == 'pengeluaran' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Pengeluaran</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/keuangan"
+                                            class="nav-link {{ request()->segment(2) == 'keuangan' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Keuangan</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/stok_barang"
+                                            class="nav-link {{ request()->segment(2) == 'stok_barang' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Stok Barang</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/laporan/produk_terjual"
+                                            class="nav-link {{ request()->segment(2) == 'produk_terjual' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Produk Terjual</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         @endif
                         <li class="nav-item">
                             <a href="/profile"
@@ -472,9 +475,13 @@
         @yield('konten')
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>PRENEUR OFFICIAL &copy; 2021-2022</strong>
+            <strong>PRENEUR &copy; <span id="copyright-year"></span></strong>
         </footer>
     </div>
+
+    <script>
+        document.getElementById("copyright-year").textContent = new Date().getFullYear();
+    </script>
     <!-- ./wrapper -->
 
 
@@ -522,7 +529,7 @@
     <!-- page script -->
     @yield('footer')
     <script>
-        $(function () {
+        $(function() {
             $("#datatable").DataTable({
                 "responsive": true,
                 "autoWidth": false,
