@@ -202,6 +202,34 @@
             background-color: rgba(15,52,96,0.7) !important;
             color: #fff !important;
         }
+        /* Select2 Dark Mode Fix */
+        body.dark-mode .select2-dropdown {
+            background-color: #16213e !important;
+            border-color: #0f3460 !important;
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .select2-results__option {
+            background-color: #16213e !important;
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .select2-results__option--highlighted[aria-selected],
+        body.dark-mode .select2-results__option[aria-selected=true] {
+            background-color: #0f3460 !important;
+            color: #fff !important;
+        }
+        body.dark-mode .select2-search--dropdown .select2-search__field {
+            background-color: #253a5e !important;
+            border-color: #0f3460 !important;
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .select2-container--bootstrap4 .select2-selection--single {
+            background-color: #253a5e !important;
+            border-color: #0f3460 !important;
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+            color: #e0e0e0 !important;
+        }
         /* Dark mode toggle button */
         #dark-mode-toggle {
             cursor: pointer;
