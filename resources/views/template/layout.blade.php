@@ -170,7 +170,20 @@
         }
         body.dark-mode h1, body.dark-mode h2, body.dark-mode h3,
         body.dark-mode h4, body.dark-mode h5, body.dark-mode h6,
-        body.dark-mode label, body.dark-mode p {
+        body.dark-mode label, body.dark-mode p,
+        body.dark-mode .user-panel .info a {
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .modal-content {
+            background-color: #16213e !important;
+            border-color: #0f3460 !important;
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .modal-header,
+        body.dark-mode .modal-footer {
+            border-color: #0f3460 !important;
+        }
+        body.dark-mode .main-header .navbar-nav .nav-link {
             color: #e0e0e0 !important;
         }
         body.dark-mode .main-footer {
