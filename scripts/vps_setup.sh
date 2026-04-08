@@ -17,9 +17,9 @@ sudo apt install -y software-properties-common
 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update
 
-echo -e "${GREEN}>>> 3. Menginstall PHP 8.1 & Ekstensi...${NC}"
-sudo apt install -y php8.1-fpm php8.1-mysql php8.1-xml php8.1-mbstring \
-  php8.1-curl php8.1-zip php8.1-gd php8.1-bcmath php8.1-intl php8.1-tokenizer
+echo -e "${GREEN}>>> 3. Menginstall PHP 8.0 & Ekstensi...${NC}"
+sudo apt install -y php8.0-fpm php8.0-mysql php8.0-xml php8.0-mbstring \
+  php8.0-curl php8.0-zip php8.0-gd php8.0-bcmath php8.0-intl php8.0-tokenizer
 
 echo -e "${GREEN}>>> 4. Menginstall Nginx, MySQL & Git...${NC}"
 sudo apt install -y nginx mysql-server git unzip
