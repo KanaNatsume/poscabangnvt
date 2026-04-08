@@ -45,7 +45,7 @@
 
     <style>
         /* ===== DARK MODE STYLES ===== */
-        body.dark-mode {
+        body.dark-mode, html.dark-mode {
             background-color: #1a1a2e !important;
             color: #e0e0e0 !important;
         }
@@ -230,6 +230,22 @@
         body.dark-mode .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
             color: #e0e0e0 !important;
         }
+        /* Pagination Dark Mode */
+        body.dark-mode .page-link {
+            background-color: #253a5e !important;
+            border-color: #0f3460 !important;
+            color: #c8d6e5 !important;
+        }
+        body.dark-mode .page-item.active .page-link {
+            background-color: #0f3460 !important;
+            border-color: #1a4a8a !important;
+            color: #fff !important;
+        }
+        body.dark-mode .page-item.disabled .page-link {
+            background-color: #16213e !important;
+            border-color: #0f3460 !important;
+            color: #667788 !important;
+        }
         /* Dark mode toggle button */
         #dark-mode-toggle {
             cursor: pointer;
@@ -269,6 +285,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <!-- Select2 -->
     <script src="{{ asset('assets') }}/plugins/select2/js/select2.full.min.js"></script>
+
+    <script>
+        // Inline script to prevent theme flashing
+        (function() {
+            if (localStorage.getItem('darkMode') === 'on') {
+                document.documentElement.classList.add('dark-mode');
+                document.body.classList.add('dark-mode');
+            }
+        })();
+    </script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed text-sm sidebar-collapse">
@@ -757,11 +783,9 @@
 
         // Dark Mode Toggle
         (function() {
-            if (localStorage.getItem('darkMode') === 'on') {
-                document.body.classList.add('dark-mode');
-            }
             document.getElementById('dark-mode-toggle').addEventListener('click', function() {
                 document.body.classList.toggle('dark-mode');
+                document.documentElement.classList.toggle('dark-mode');
                 localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'on' : 'off');
             });
         })();
