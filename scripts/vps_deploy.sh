@@ -46,21 +46,22 @@ sudo chmod -R 775 $DEST_DIR/storage $DEST_DIR/bootstrap/cache
 
 echo -e "${GREEN}>>> 5. Konfigurasi Nginx...${NC}"
 NGINX_CONF="/etc/nginx/sites-available/$DOMAIN"
-sudo bash -c "cat > $NGINX_CONF <<EOF
+
+sudo tee $NGINX_CONF > /dev/null <<'EOF'
 server {
     listen 80;
-    server_name $DOMAIN;
-    root $DEST_DIR/public;
+    server_name pos.ntbkstoretsm.web.id;
+    root /var/www/ntbk-store/public;
 
-    add_header X-Frame-Options \"SAMEORIGIN\";
-    add_header X-XSS-Protection \"1; mode=block\";
-    add_header X-Content-Type-Options \"nosniff\";
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Content-Type-Options "nosniff";
 
     index index.php;
     charset utf-8;
 
     location / {
-        try_files \$uri \$uri/ /index.php?\$query_string;
+        try_files $uri $uri/ /index.php?$query_string;
     }
 
     location = /favicon.ico { access_log off; log_not_found off; }
@@ -71,14 +72,14 @@ server {
     location ~ \.php$ {
         include fastcgi_params;
         fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     }
 
     location ~ /\.(?!well-known).* {
         deny all;
     }
 }
-EOF"
+EOF
 
 sudo ln -sf $NGINX_CONF /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
