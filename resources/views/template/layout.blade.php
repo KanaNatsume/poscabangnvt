@@ -287,17 +287,22 @@
     <script src="{{ asset('assets') }}/plugins/select2/js/select2.full.min.js"></script>
 
     <script>
-        // Inline script to prevent theme flashing
+        // Inline script to prevent theme flashing - only target documentElement in head
         (function() {
             if (localStorage.getItem('darkMode') === 'on') {
                 document.documentElement.classList.add('dark-mode');
-                document.body.classList.add('dark-mode');
             }
         })();
     </script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed text-sm sidebar-collapse">
+    <script>
+        // Apply to body immediately as it becomes available
+        if (localStorage.getItem('darkMode') === 'on') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
     <div class="wrapper">
 
         <!-- Navbar -->
