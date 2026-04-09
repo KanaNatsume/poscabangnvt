@@ -18,6 +18,10 @@ REPO_URL="https://github.com/KanaNatsume/poscabangnvt.git"
 DEST_DIR="/var/www/ntbk-store"
 
 echo -e "${GREEN}>>> 1. Syncing Repository...${NC}"
+
+# Mencegah error "dubious ownership" karena folder dimiliki oleh www-data
+sudo git config --global --add safe.directory "$DEST_DIR"
+
 if [ -d "$DEST_DIR" ]; then
     echo -e "${YELLOW}Direktori sudah ada. Mengambil update terbaru...${NC}"
     cd "$DEST_DIR" || exit

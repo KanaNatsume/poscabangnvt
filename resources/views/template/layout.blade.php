@@ -275,6 +275,15 @@
             content: '🌙';
             left: 24px;
         }
+        /* SweetAlert2 Dark Mode Fix */
+        body.dark-mode .swal2-popup {
+            background-color: #16213e !important;
+            color: #e0e0e0 !important;
+            border: 1px solid #0f3460 !important;
+        }
+        body.dark-mode .swal2-title {
+            color: #e0e0e0 !important;
+        }
     </style>
 
     <!-- jQuery -->
