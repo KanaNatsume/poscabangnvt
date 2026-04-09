@@ -284,6 +284,24 @@
         body.dark-mode .swal2-title {
             color: #e0e0e0 !important;
         }
+        /* Callout Dark Mode Fix */
+        body.dark-mode .callout {
+            background-color: #16213e !important;
+            color: #e0e0e0 !important;
+            border-color: #0f3460 !important;
+        }
+        body.dark-mode .callout.callout-danger {
+            border-left-color: #e3342f !important;
+        }
+        body.dark-mode .callout.callout-info {
+            border-left-color: #117a8b !important;
+        }
+        body.dark-mode .callout.callout-warning {
+            border-left-color: #d39e00 !important;
+        }
+        body.dark-mode .callout.callout-success {
+            border-left-color: #28a745 !important;
+        }
     </style>
 
     <!-- jQuery -->
@@ -393,7 +411,7 @@
                                     class="nav-link {{ request()->segment(1) == 'penjualan' ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-chart-bar"></i>
                                     <p>
-                                        penjualan
+                                        Penjualan
                                     </p>
                                 </a>
                             </li>
