@@ -57,6 +57,11 @@ class PelangganController extends Controller
     public function destroy($id)
     {
         $Pelanggan = Pelanggan::find($id);
+
+        if ($Pelanggan->hutang()->exists() || $Pelanggan->penjualan()->exists() || $Pelanggan->returBarang()->exists() || $Pelanggan->transfer()->exists()) {
+            return redirect('/pelanggan')->with('error', 'Data pelanggan tidak bisa dihapus karena memiliki riwayat transaksi (Hutang/Penjualan/Retur/Transfer)');
+        }
+
         $Pelanggan->delete();
         return redirect('/pelanggan')->with('success', 'Data Pelanggan berhasil terhapus');
     }

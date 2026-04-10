@@ -19,9 +19,14 @@ class Pelanggan extends Model
         return $this->hasMany(Penjualan::class);
     }
 
-    public function returnBarang()
+    public function hutang()
     {
-        return $this->hasMany(ReturnBarang::class);
+        return $this->hasMany(Hutang::class);
+    }
+
+    public function returBarang()
+    {
+        return $this->hasMany(ReturBarang::class);
     }
 
     public function transfer()

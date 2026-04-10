@@ -56,6 +56,11 @@ Route::group(['middleware' => ['auth', 'check.role:admin']], function () {
     Route::post('/user', 'UserController@store');
     Route::post('/user/{id}/update', 'UserController@update');
     Route::get('/user/{id}/destroy', 'UserController@destroy');
+
+    Route::get('/bank', 'BankController@index');
+    Route::post('/bank', 'BankController@store');
+    Route::post('/bank/{id}/update', 'BankController@update');
+    Route::get('/bank/{id}/destroy', 'BankController@destroy');
 });
 
 Route::group(['middleware' => ['auth']], function () {
@@ -81,6 +86,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/penjualan/detail_penjualan', 'PenjualanController@detail_penjualan');
     Route::get('/penjualan/{id}/destroy', 'PenjualanController@destroy');
     Route::get('/penjualan/struk/{id}', 'PenjualanController@struk');
+    Route::get('/penjualan/pdf/{id}', 'PenjualanController@downloadPDF');
 
     Route::get('/hutang', 'HutangController@index');
     Route::get('/hutang/detail/{id}', 'HutangController@detail');

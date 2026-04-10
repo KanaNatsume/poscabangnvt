@@ -408,21 +408,17 @@ $(document).on('click', '#btn_tambahkan', function () {
 });
 
 $(document).on('change', '#jenis', function() {
-// alert($(this).find(':selected').val());
 if($(this).val() === 'transfer') {
-// $('#bank_lain').focus();
 $('#target').html(`
 <div class="row">
     <div class="col-md-6">
         <div class="form-group tutup">
-            <label for="jenis_bank">Bank</label>
-            <select name="jenis_bank" id="jenis_bank" class="form-control">
-                <option value="BRI">BRI</option>
-                <option value="BCA">BCA</option>
-                <option value="BNI">BNI</option>
-                <option value="MANDIRI">MANDIRI</option>
-                <option value="BJB">BJB</option>
-                <option value="BTN">BTN</option>
+            <label for="bank_id">Pilih Bank</label>
+            <select name="bank_id" id="bank_id" class="form-control" required>
+                <option value="">-- Pilih Bank --</option>
+                @foreach($banks as $b)
+                <option value="{{ $b->id }}">{{ $b->nama_bank }} - {{ $b->no_rekening }} (a/n {{ $b->atas_nama }})</option>
+                @endforeach
             </select>
         </div>
     </div>

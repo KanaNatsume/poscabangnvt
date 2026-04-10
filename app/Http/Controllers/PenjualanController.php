@@ -10,6 +10,8 @@ use App\Pelanggan;
 use App\Penjualan;
 use App\StokBarang;
 use Carbon\Carbon;
+use App\Bank;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +38,8 @@ class PenjualanController extends Controller
             ->get();
         // $detail_penjualan = DetailPejualan::orderBy('id', 'desc')->where('no_invoice', $no_invoice)->get();
         $pelanggan = Pelanggan::all();
-        return view('penjualan.create', compact('title', 'barang', 'detail_penjualan', 'pelanggan'));
+        $banks = Bank::all();
+        return view('penjualan.create', compact('title', 'barang', 'detail_penjualan', 'pelanggan', 'banks'));
     }
 
     public function create($no_invoice)
@@ -75,6 +78,15 @@ class PenjualanController extends Controller
             $penjualan->kembalian = $request->kembalian;
             $penjualan->jenis = $request->jenis;
             $penjualan->jenis_bank = $request->jenis_bank;
+            if ($request->jenis == 'transfer' && $request->bank_id) {
+                $bank = Bank::find($request->bank_id);
+                if ($bank) {
+                    $penjualan->bank_id = $bank->id;
+                    $penjualan->bank_nama = $bank->nama_bank;
+                    $penjualan->bank_rekening = $bank->no_rekening;
+                    $penjualan->bank_atas_nama = $bank->atas_nama;
+                }
+            }
             $penjualan->biaya_pengiriman = $request->biaya_pengiriman;
             $penjualan->keterangan = $request->keterangan;
             if ($request->hasFile('bukti_transfer')) {
@@ -82,7 +94,6 @@ class PenjualanController extends Controller
                 $nama_bukti_transfer = time() . '_' . $bukti_transfer->getClientOriginalName();
                 $bukti_transfer->move('bukti_transfer', $nama_bukti_transfer);
                 $penjualan->bukti_transfer = $nama_bukti_transfer;
-                $penjualan->save();
             }
             $penjualan->save();
             return redirect('/penjualan/' . no_invoice())->with('print_struk', $penjualan->id)->with('success', 'Transaksi Berhasil Disimpan');
@@ -204,6 +215,19 @@ class PenjualanController extends Controller
             ->where('detail_penjualan.no_invoice', $penjualan->no_invoice)
             ->get();
         return view('penjualan.struk', compact('title', 'penjualan', 'detail_penjualan'));
+    }
+
+    public function downloadPDF($id)
+    {
+        $penjualan = Penjualan::find($id);
+        $detail_penjualan = DB::table('detail_penjualan')
+            ->join('barang', 'detail_penjualan.kode_barang', 'barang.kode_barang')
+            ->select('detail_penjualan.*', 'barang.nama_barang')
+            ->where('detail_penjualan.no_invoice', $penjualan->no_invoice)
+            ->get();
+
+        $pdf = PDF::loadView('penjualan.struk_pdf', compact('penjualan', 'detail_penjualan'));
+        return $pdf->download('Nota-' . $penjualan->no_invoice . '.pdf');
     }
 
     function ambil_data_barang(Request $request)

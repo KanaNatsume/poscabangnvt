@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHILS OFFICIAL - {{ $penjualan->no_invoice }}</title>
+    <title>Notebook Store Tasikmalaya - {{ $penjualan->no_invoice }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,14 +48,39 @@
             margin-top: 5px; /* Adjusted margin here */
             text-align: center;
         }
+
+        .no-print {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn-share {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #fff;
+            border-radius: 5px;
+            margin: 5px;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .btn-wa { background-color: #25d366; }
+        .btn-email { background-color: #007bff; }
+        .btn-download { background-color: #6c757d; }
+
+        @media print {
+            .no-print { display: none; }
+            .container { border: none; background: none; }
+        }
     </style>
 </head>
 
 <body onload="window.print()">
     <div class="container">
         <center>
-            <h2>CHILS OFFICIAL</h2>
-            <h4>Jl. Ibu Apipah No.6D Kel.Kahuripan Kec. Tawang Kota Tasikmalaya</h5>
+            <img src="{{ asset('assets/dist/img/ntbk-main.png') }}" alt="Logo" style="width: 180px; margin-bottom: 5px;">
+            <h3 style="margin-top: 5px; margin-bottom: 2px;">Notebook Store Tasikmalaya</h3>
+            <p style="margin-top: 0; font-size: 14px;">Jl. Cikalang Girang No.46, Kahuripan, Kec. Tawang, Kota Tasikmalaya, Jawa Barat 46115</p>
         </center>
         <table>
             <tr>
@@ -80,7 +105,13 @@
             </tr>
             <tr>
                 <th>Bank</th>
-                <td style="padding-right: 150px;">: {{ ucfirst($penjualan->jenis_bank) }}</td>
+                <td style="padding-right: 150px;">: 
+                    @if($penjualan->jenis == 'transfer' && $penjualan->bank_nama)
+                        {{ $penjualan->bank_nama }} ({{ $penjualan->bank_rekening }}) a/n {{ $penjualan->bank_atas_nama }}
+                    @else
+                        {{ ucfirst($penjualan->jenis_bank) }}
+                    @endif
+                </td>
             </tr>
             @if($penjualan->keterangan)
             <tr>
@@ -134,11 +165,46 @@
         </table>
 
         <div class="footer">
-            <p>Barang yang rusak dapat dikembalikan dengan syarat tertentu</p>
-            <p>Selamat berbelanja kembali</p>
-            <p>Terima kasih</p>
+            <p>Password (jika ada) : 1234</p>
+            <p>Terima kasih sudah berbelanja 😊</p>
+        </div>
+
+        <div class="no-print">
+            <hr>
+            <p><strong>Kirim Nota :</strong></p>
+            @php
+                $phone = $penjualan->pelanggan->no_hp ?? '';
+                $phone = preg_replace('/[^0-9]/', '', $phone);
+                if (substr($phone, 0, 1) === '0') {
+                    $phone = '62' . substr($phone, 1);
+                }
+                
+                $message = "Halo " . ($penjualan->pelanggan->nama ?? 'Pelanggan') . ",\n\nIni adalah nota belanja Anda dari *Notebook Store Tasikmalaya*.\n" .
+                           "*Total:* Rp " . number_format($penjualan->sub_total, 0, ',', '.') . "\n\n" .
+                           "Silakan unduh nota PDF Anda di sini:\n" . url('/penjualan/pdf/' . $penjualan->id);
+                $wa_url = "https://wa.me/" . $phone . "?text=" . rawurlencode($message);
+                
+                $email_subject = "Nota Belanja - " . $penjualan->no_invoice;
+                $email_body = "Halo " . ($penjualan->pelanggan->nama ?? 'Pelanggan') . ",\n\nTerima kasih sudah berbelanja di Notebook Store Tasikmalaya.\nBerikut adalah link untuk mengunduh nota belanja Anda:\n" . url('/penjualan/pdf/' . $penjualan->id);
+                $email_url = "mailto:" . ($penjualan->pelanggan->email ?? '') . "?subject=" . rawurlencode($email_subject) . "&body=" . rawurlencode($email_body);
+            @endphp
+            
+            <a href="{{ $wa_url }}" target="_blank" class="btn-share btn-wa">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+            <a href="{{ $email_url }}" class="btn-share btn-email">
+                <i class="far fa-envelope"></i> Email
+            </a>
+            <a href="/penjualan/pdf/{{ $penjualan->id }}" class="btn-share btn-download">
+                <i class="fas fa-file-pdf"></i> Download PDF
+            </a>
+            <br><br>
+            <button onclick="window.print()" class="btn btn-secondary btn-sm">Cetak Ulang</button>
         </div>
     </div>
+
+    <!-- Keep FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </body>
 
 </html>
