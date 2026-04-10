@@ -98,6 +98,14 @@
         }
         body.dark-mode .table thead th {
             border-color: #0f3460 !important;
+        }
+
+        /* Brand Logo Theme Switch */
+        .brand-link .logo-dark { display: inline-block; }
+        .brand-link .logo-light { display: none; }
+        
+        body.dark-mode .brand-link .logo-dark { display: none; }
+        body.dark-mode .brand-link .logo-light { display: inline-block; }
             background-color: #0f3460 !important;
             color: #fff !important;
         }
@@ -366,7 +374,8 @@
         <aside class="main-sidebar elevation-4 sidebar-light-primary">
             <!-- Brand Logo -->
             <a href="/dashboard" class="brand-link">
-                <img src="{{ asset('assets') }}/dist/img/ntbk-dark.png" alt="AdminLTE Logo" class="brand-image" style="opacity: .8">
+                <img src="{{ asset('assets') }}/dist/img/ntbk-dark.png" alt="Logo" class="brand-image logo-dark" style="opacity: .8">
+                <img src="{{ asset('assets') }}/dist/img/ntbk-light.png" alt="Logo" class="brand-image logo-light" style="opacity: .8">
                 <span class="brand-text font-weight-light">NTBK Store</span>
             </a>
 
