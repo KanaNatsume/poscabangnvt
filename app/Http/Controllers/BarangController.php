@@ -60,22 +60,8 @@ class BarangController extends Controller
         // Atur nilai default 0 untuk semua jenis harga multi-tier yang sudah dihapus fiturnya
         $input['harga_grosir'] = 0;
         $input['harga_agen'] = 0;
-        $input['harga_custom'] = 0;
-        $input['harga_customb'] = 0;
-        $input['harga_customc'] = 0;
-        $input['harga_customd'] = 0;
-        $input['harga_custome'] = 0;
-        $input['harga_customf'] = 0;
-        $input['harga_customg'] = 0;
         $input['profit_harga_grosir'] = 0;
         $input['profit_harga_agen'] = 0;
-        $input['profit_harga_custom'] = 0;
-        $input['profit_harga_customb'] = 0;
-        $input['profit_harga_customc'] = 0;
-        $input['profit_harga_customd'] = 0;
-        $input['profit_harga_custome'] = 0;
-        $input['profit_harga_customf'] = 0;
-        $input['profit_harga_customg'] = 0;
 
         if ($request->is_jasa == '1') {
             $input['stok'] = 0;
@@ -134,22 +120,8 @@ class BarangController extends Controller
         // Jenis Harga lain di nonaktifkan: force set to 0
         $barang->harga_grosir = 0;
         $barang->harga_agen = 0;
-        $barang->harga_custom = 0;
-        $barang->harga_customb = 0;
-        $barang->harga_customc = 0;
-        $barang->harga_customd = 0;
-        $barang->harga_custome = 0;
-        $barang->harga_customf = 0;
-        $barang->harga_customg = 0;
         $barang->profit_harga_grosir = 0;
         $barang->profit_harga_agen = 0;
-        $barang->profit_harga_custom = 0;
-        $barang->profit_harga_customb = 0;
-        $barang->profit_harga_customc = 0;
-        $barang->profit_harga_customd = 0;
-        $barang->profit_harga_custome = 0;
-        $barang->profit_harga_customf = 0;
-        $barang->profit_harga_customg = 0;
 
         $barang->deskripsi = $request->deskripsi;
         $barang->is_jasa = $request->is_jasa;

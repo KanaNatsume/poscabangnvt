@@ -252,13 +252,6 @@ class PenjualanController extends Controller
                 "harga_grosir" => $b->harga_grosir,
                 "harga_agen" => $b->harga_agen,
                 "stok" => $b->stok,
-                "harga_custom" => $b->harga_custom,
-                "harga_customb" => $b->harga_customb,
-                "harga_customc" => $b->harga_customc,
-                "harga_customd" => $b->harga_customd,
-                "harga_custome" => $b->harga_custome,
-                "harga_customf" => $b->harga_customf,
-                "harga_customg" => $b->harga_customg,
             ];
         }
 
