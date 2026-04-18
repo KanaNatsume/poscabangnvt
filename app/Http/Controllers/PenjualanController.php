@@ -67,7 +67,7 @@ class PenjualanController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        if ($request->jenis == 'cash' || $request->jenis == 'transfer') {
+        if ($request->jenis != 'hutang') {
             $penjualan = new Penjualan;
             $penjualan->user_id = Auth::user()->id;
             $penjualan->pelanggan_id = $request->pelanggan_id;

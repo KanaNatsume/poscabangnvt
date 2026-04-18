@@ -204,6 +204,11 @@
                                                 <select name="jenis" id="jenis" class="form-control" required>
                                                     <option value=""></option>
                                                     <option value="cash" id="jenis_cash">Cash</option>
+                                                    <option value="tokopedia">Tokopedia</option>
+                                                    <option value="tiktok_shop">Tiktok Shop</option>
+                                                    <option value="shopee">Shopee</option>
+                                                    <option value="spaylater_extra">Spaylater Extra</option>
+                                                    <option value="toco">Toco</option>
                                                     <option value="transfer" id="jenis_transfer">Transfer</option>
                                                     <option value="hutang" id="jenis_hutang">Hutang</option>
                                                 </select>
