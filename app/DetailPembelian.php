@@ -10,6 +10,7 @@ class DetailPembelian extends Model
     protected $fillable = [
         'supplier_id',
         'no_pembelian',
+        'tanggal',
         'total_pembayaran',
         'pembayaran',
         'kembalian',

@@ -67,7 +67,7 @@
                                         <td>{{ number_format($item->total_pembayaran, 0, ',', '.')  }}</td>
                                         <td>{{ number_format($item->pembayaran, 0, ',', '.') }}</td>
                                         <td>{{ number_format($item->kembalian, 0, ',', '.') }}</td>
-                                        <td>{{ date('d-m-Y', strtotime($item->created_at)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($item->tanggal ?? $item->created_at)) }}</td>
                                         <td>
                                             <a href="/pembelian/detail/{{ $item->no_pembelian }}"
                                                 class="btn btn-secondary text-white btn-sm" target="_blank"><i

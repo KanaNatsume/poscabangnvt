@@ -133,6 +133,10 @@
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
+                                        <label for="tanggal">Tanggal</label>
+                                        <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="supplier_id">Pilih Supplier</label>
                                         <select name="supplier_id" id="supplier_id" class="form-control select2bs4"
                                             required>

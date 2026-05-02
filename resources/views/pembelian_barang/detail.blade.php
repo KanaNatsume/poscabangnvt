@@ -71,7 +71,7 @@
                 style="color: #595959;">{{ $pembelian->supplier->nama }}</strong></p>
         <p style="color: #595959; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Tanggal
             <span style="margin-left: 34px;">:</span> <strong
-                style="color: #595959;">{{ date('d-m-Y', strtotime($pembelian->created_at)) }}</strong>
+                style="color: #595959;">{{ date('d-m-Y', strtotime($pembelian->tanggal ?? $pembelian->created_at)) }}</strong>
         </p>
     </section>
 
