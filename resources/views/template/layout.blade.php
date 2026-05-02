@@ -635,7 +635,7 @@
                                     class="nav-link {{ request()->segment(1) == 'pengeluaran' ? 'active' : '' }}">
                                     <i class="nav-icon far fa-calendar-alt"></i>
                                     <p>
-                                        Pengeluaran
+                                        Pencatatan Keuangan
                                     </p>
                                 </a>
                             </li>
@@ -713,7 +713,7 @@
                                         <a href="/laporan/pengeluaran"
                                             class="nav-link {{ request()->segment(2) == 'pengeluaran' ? 'active' : '' }}">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Pengeluaran</p>
+                                            <p>Pencatatan Keuangan</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">

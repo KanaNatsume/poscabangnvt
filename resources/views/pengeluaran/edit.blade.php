@@ -27,7 +27,7 @@
                             @csrf
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="no_pengeluaran">No Pengeluaran</label>
+                                    <label for="no_pengeluaran">No Transaksi</label>
                                     <input type="text" name="no_pengeluaran" class="form-control form-control-sm"
                                         id="no_pengeluaran" value="{{ $pengeluaran->no_pengeluaran }}" readonly
                                         required>
@@ -38,7 +38,15 @@
                                         value="{{ $pengeluaran->tanggal ?? date('Y-m-d', strtotime($pengeluaran->created_at)) }}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="nama">Nama Pengeluaran</label>
+                                    <label for="jenis">Jenis Transaksi</label>
+                                    <select name="jenis" id="jenis" class="form-control form-control-sm" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Pemasukan" {{ $pengeluaran->jenis == 'Pemasukan' ? 'selected' : '' }}>Pemasukan</option>
+                                        <option value="Pengeluaran" {{ $pengeluaran->jenis == 'Pengeluaran' ? 'selected' : '' }}>Pengeluaran</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nama">Nama Transaksi</label>
                                     <input type="text" name="nama" class="form-control form-control-sm" id="nama"
                                         value="{{ $pengeluaran->nama }}" required>
                                 </div>
@@ -52,7 +60,7 @@
                                     <label for="kategori_pengeluaran">Kategori</label>
                                     <select name="kategori_pengeluaran" id="kategori_pengeluaran" class="form-control form-control-sm" required>
                                         <option value="">-- Pilih Kategori --</option>
-                                        @foreach(['Toko','Kesra','Penjualan','Pembelian','Service','A Kevin','Kantor'] as $kat)
+                                        @foreach(['Toko','Kesra','Penjualan','Pembelian','Service','A Kevin','Kantor','Sisa'] as $kat)
                                         <option value="{{ $kat }}" {{ $pengeluaran->kategori_pengeluaran == $kat ? 'selected' : '' }}>{{ $kat }}</option>
                                         @endforeach
                                     </select>

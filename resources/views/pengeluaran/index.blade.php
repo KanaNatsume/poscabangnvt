@@ -36,7 +36,8 @@
                                 <thead class="bg-primary">
                                     <tr>
                                         <th style="width: 10px">#</th>
-                                        <th>No Pengeluaran</th>
+                                        <th>No Transaksi</th>
+                                        <th>Jenis</th>
                                         <th>Nama</th>
                                         <th>Kategori</th>
                                         <th>Jumlah</th>
@@ -53,6 +54,13 @@
                                     <tr>
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $item->no_pengeluaran }}</td>
+                                        <td>
+                                            @if($item->jenis == 'Pemasukan')
+                                                <span class="badge badge-success">Pemasukan</span>
+                                            @else
+                                                <span class="badge badge-danger">Pengeluaran</span>
+                                            @endif
+                                        </td>
                                         <td>{{ $item->nama }}</td>
                                         <td><span class="badge badge-info">{{ $item->kategori_pengeluaran ?? '-' }}</span></td>
                                         <td>{{ number_format($item->jumlah, 0, ',', '.') }}</td>
@@ -81,7 +89,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header bg-warning">
-                            <h3 class="card-title"><i class="fas fa-chart-pie mr-2"></i>Ringkasan Total Pengeluaran per Kategori</h3>
+                            <h3 class="card-title"><i class="fas fa-chart-pie mr-2"></i>Ringkasan Saldo Keuangan per Kategori</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">

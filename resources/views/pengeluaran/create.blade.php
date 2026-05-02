@@ -24,7 +24,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">No Pengeluaran : <strong>{{ request()->segment(3) }}</strong></h3>
+                            <h3 class="card-title">No Transaksi : <strong>{{ request()->segment(3) }}</strong></h3>
                         </div>
                         <form action="/pengeluaran" method="POST">
                             @csrf
@@ -37,7 +37,15 @@
                                         value="{{ date('Y-m-d') }}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="nama">Nama Pengeluaran</label>
+                                    <label for="jenis">Jenis Transaksi</label>
+                                    <select name="jenis" id="jenis" class="form-control form-control-sm" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Pemasukan">Pemasukan</option>
+                                        <option value="Pengeluaran">Pengeluaran</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nama">Nama Transaksi</label>
                                     <input type="text" name="nama" class="form-control form-control-sm" id="nama"
                                         required>
                                 </div>
@@ -58,6 +66,7 @@
                                         <option value="Service">Service</option>
                                         <option value="A Kevin">A Kevin</option>
                                         <option value="Kantor">Kantor</option>
+                                        <option value="Sisa">Sisa</option>
                                     </select>
                                 </div>
                                 <div class="form-group">

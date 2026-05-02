@@ -14,12 +14,14 @@ class PengeluaranController extends Controller
      */
     public function index()
     {
-        $title = 'Pengeluaran';
+        $title = 'Pencatatan Keuangan';
         $pengeluaran = Pengeluaran::orderBy('id', 'desc')->get();
-        $kategori_list = ['Toko','Kesra','Penjualan','Pembelian','Service','A Kevin','Kantor'];
+        $kategori_list = ['Toko','Kesra','Penjualan','Pembelian','Service','A Kevin','Kantor','Sisa'];
         $total_per_kategori = [];
         foreach ($kategori_list as $kat) {
-            $total_per_kategori[$kat] = Pengeluaran::where('kategori_pengeluaran', $kat)->sum('jumlah');
+            $pemasukan = Pengeluaran::where('kategori_pengeluaran', $kat)->where('jenis', 'Pemasukan')->sum('jumlah');
+            $pengeluaran_jml = Pengeluaran::where('kategori_pengeluaran', $kat)->where('jenis', 'Pengeluaran')->sum('jumlah');
+            $total_per_kategori[$kat] = $pemasukan - $pengeluaran_jml;
         }
         return view('pengeluaran.index', compact('title', 'pengeluaran', 'total_per_kategori', 'kategori_list'));
     }
@@ -31,7 +33,7 @@ class PengeluaranController extends Controller
      */
     public function create($no_pengeluaran)
     {
-        $title = 'Pengeluaran';
+        $title = 'Pencatatan Keuangan';
         return view('pengeluaran.create', compact('title'));
     }
 
@@ -44,7 +46,7 @@ class PengeluaranController extends Controller
     public function store(Request $request)
     {
         Pengeluaran::create($request->all());
-        return redirect('/pengeluaran')->with('success', 'Data pengeluaran berhasil tersimpan');
+        return redirect('/pengeluaran')->with('success', 'Data pencatatan keuangan berhasil tersimpan');
     }
 
     /**
@@ -66,7 +68,7 @@ class PengeluaranController extends Controller
      */
     public function edit(Pengeluaran $pengeluaran)
     {
-        $title = 'Pengeluaran';
+        $title = 'Pencatatan Keuangan';
         return view('pengeluaran.edit', compact('title', 'pengeluaran'));
     }
 
@@ -80,13 +82,14 @@ class PengeluaranController extends Controller
     public function update(Request $request, Pengeluaran $pengeluaran)
     {
         $pengeluaran->no_pengeluaran = $request->no_pengeluaran;
+        $pengeluaran->jenis = $request->jenis;
         $pengeluaran->tanggal = $request->tanggal;
         $pengeluaran->nama = $request->nama;
         $pengeluaran->jumlah = $request->jumlah;
         $pengeluaran->keterangan = $request->keterangan;
         $pengeluaran->kategori_pengeluaran = $request->kategori_pengeluaran;
         $pengeluaran->save();
-        return redirect('/pengeluaran')->with('success', 'Data pengeluaran berhasil terupdate');
+        return redirect('/pengeluaran')->with('success', 'Data pencatatan keuangan berhasil terupdate');
     }
 
     /**
@@ -98,6 +101,6 @@ class PengeluaranController extends Controller
     public function destroy(Pengeluaran $pengeluaran)
     {
         $pengeluaran->delete();
-        return redirect('/pengeluaran')->with('success', 'Data pengeluaran berhasil terhapus');
+        return redirect('/pengeluaran')->with('success', 'Data pencatatan keuangan berhasil terhapus');
     }
 }

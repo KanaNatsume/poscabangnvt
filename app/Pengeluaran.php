@@ -9,6 +9,7 @@ class Pengeluaran extends Model
     protected $table = 'pengeluaran';
     protected $fillable = [
         'no_pengeluaran',
+        'jenis',
         'tanggal',
         'nama',
         'jumlah',
