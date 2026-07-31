@@ -398,15 +398,27 @@
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                        <li class="nav-item">
-                            <a href="/dashboard"
-                                class="nav-link {{ request()->segment(1) == 'dashboard' ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Dashboard
-                                </p>
-                            </a>
-                        </li>
+                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'kasir')
+                            <li class="nav-item">
+                                <a href="/dashboard"
+                                    class="nav-link {{ request()->segment(1) == 'dashboard' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>
+                                        Dashboard
+                                    </p>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (auth()->user()->role == 'karyawan')
+                            <li class="nav-item">
+                                <a href="/absensi/karyawan"
+                                    class="nav-link {{ request()->segment(1) == 'absensi' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-clock"></i>
+                                    <p>Absensi Kehadiran</p>
+                                </a>
+                            </li>
+                        @endif
                         @if (auth()->user()->role == 'kasir')
                             <li class="nav-item">
                                 <a href="/pelanggan"
@@ -597,12 +609,39 @@
                             <li class="nav-item">
                                 <a href="/user"
                                     class="nav-link {{ request()->segment(1) == 'user' ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-user"></i>
-                                    <p>
-                                        User
-                                    </p>
-                                </a>
-                            </li>
+                                     <i class="nav-icon fas fa-user"></i>
+                                     <p>
+                                         User
+                                     </p>
+                                 </a>
+                             </li>
+                             <li class="nav-item">
+                                 <a href="/absensi"
+                                     class="nav-link {{ request()->segment(1) == 'absensi' ? 'active' : '' }}">
+                                     <i class="nav-icon fas fa-user-clock"></i>
+                                     <p>
+                                         Data Absensi
+                                     </p>
+                                 </a>
+                             </li>
+                             <li class="nav-item">
+                                 <a href="/penggajian"
+                                     class="nav-link {{ request()->segment(1) == 'penggajian' ? 'active' : '' }}">
+                                     <i class="nav-icon fas fa-money-bill-wave"></i>
+                                     <p>
+                                         Penggajian
+                                     </p>
+                                 </a>
+                             </li>
+                             <li class="nav-item">
+                                 <a href="/pengaturan-absensi"
+                                     class="nav-link {{ request()->segment(1) == 'pengaturan-absensi' ? 'active' : '' }}">
+                                     <i class="nav-icon fas fa-map-marked-alt"></i>
+                                     <p>
+                                         Pengaturan Lokasi Absen
+                                     </p>
+                                 </a>
+                             </li>
                             <li class="nav-item">
                                 <a href="/penjualan/{{ no_invoice() }}"
                                     class="nav-link {{ request()->segment(1) == 'penjualan' ? 'active' : '' }}">

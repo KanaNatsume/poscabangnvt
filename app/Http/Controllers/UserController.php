@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $title = 'User';
-        $user = User::orderBy('id', 'desc')->where('role', 'kasir')->get();
+        $user = User::orderBy('id', 'desc')->whereIn('role', ['kasir', 'karyawan'])->get();
         return view('user.index', compact('title', 'user'));
     }
 
@@ -38,7 +38,8 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make('password');
-        $user->role = 'kasir';
+        $user->role = $request->role ?? 'kasir';
+        $user->gaji_pokok = str_replace('.', '', $request->gaji_pokok ?? 0);
         $user->save();
         return redirect('/user')->with('success', 'Data user berhasil tersimpan');
     }
@@ -55,6 +56,12 @@ class UserController extends Controller
         $user = User::find($id);
         $user->name = $request->editName;
         $user->email = $request->editEmail;
+        if ($request->has('editRole')) {
+            $user->role = $request->editRole;
+        }
+        if ($request->has('editGajiPokok')) {
+            $user->gaji_pokok = str_replace('.', '', $request->editGajiPokok);
+        }
         $user->save();
         return redirect('/user')->with('success', 'Data user berhasil terupdate');
     }

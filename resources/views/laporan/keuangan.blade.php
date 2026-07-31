@@ -49,19 +49,23 @@
                             </form>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered">
-                                <tr>
-                                    <th>Total Keuntungan</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th>Total Pengeluaran</th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <th>Keuntungan Bersih</th>
-                                    <td></td>
-                                </tr>
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> Silakan pilih rentang tanggal untuk menampilkan data keuangan.
+                            </div>
+                            <table class="table table-bordered table-hover mt-3">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Tanggal / Bulan</th>
+                                        <th class="text-success">Pemasukan (Omzet)</th>
+                                        <th class="text-danger">Pengeluaran</th>
+                                        <th>Keuntungan Bersih</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">Data tidak tersedia. Lakukan pencarian terlebih dahulu.</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>

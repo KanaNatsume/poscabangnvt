@@ -70,9 +70,9 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="keterangan">Keterangan</label>
+                                    <label for="keterangan">Keterangan (Opsional)</label>
                                     <input type="text" name="keterangan" class="form-control form-control-sm"
-                                        id="keterangan" required>
+                                        id="keterangan">
                                 </div>
                             </div>
 

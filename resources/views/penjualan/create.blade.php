@@ -234,6 +234,37 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input class="custom-control-input" type="checkbox" id="is_tukar_tambah" name="is_tukar_tambah" value="1">
+                                                    <label for="is_tukar_tambah" class="custom-control-label">Tukar Tambah Laptop</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="tukar_tambah_section" style="display: none;">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="nama_barang_tukar_tambah">Nama Laptop Trade-In</label>
+                                                <input type="text" class="form-control" name="nama_barang_tukar_tambah" id="nama_barang_tukar_tambah" placeholder="Contoh: Laptop Asus X441M Bekas">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="harga_tukar_tambah">Nilai Tukar Tambah</label>
+                                                <input type="text" class="form-control" id="harga_tukar_tambah" autocomplete="off">
+                                                <input type="hidden" name="harga_tukar_tambah" id="harga_tukar_tambah1">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mt-2">
+                                            <div class="form-group">
+                                                <label for="keterangan_tukar_tambah">Detail / Keterangan Laptop Trade-In</label>
+                                                <textarea name="keterangan_tukar_tambah" id="keterangan_tukar_tambah" rows="2" class="form-control" placeholder="Contoh: Kondisi fisik 80%, baterai drop, kelengkapan charger saja..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
                                                 <label for="keterangan">Keterangan / Catatan Transaksi (Opsional)</label>
                                                 <textarea name="keterangan" id="keterangan" rows="2" class="form-control" placeholder="Tambahkan catatan khusus untuk nota ini bila perlu..."></textarea>
                                             </div>
@@ -464,13 +495,47 @@ $('#potongan1').val(potongan1.join(""));
 })
 
 $(document).on('keyup', '#biaya_pengiriman', function () {
-let total_pembayaran1 = $('#total_pembayaran1').val();
-let biaya_pengiriman1 = $('#biaya_pengiriman1').val();
-let hasil = parseInt(biaya_pengiriman1) + parseInt(total_pembayaran1);
-let convert = parseInt(hasil).toLocaleString('id-ID');
-$('#sub_total').val(convert);
-$('#sub_total1').val(hasil);
+    hitungSubTotal();
+    kalkulasi();
 });
+
+$('#harga_tukar_tambah').on('keyup', function () {
+    $(this).mask('000.000.000', {reverse: true});
+    let harga_tukar_tambah1 = $(this).val().split('.');
+    $('#harga_tukar_tambah1').val(harga_tukar_tambah1.join(""));
+    hitungSubTotal();
+    kalkulasi();
+});
+
+$(document).on('change', '#is_tukar_tambah', function() {
+    if ($(this).is(':checked')) {
+        $('#tukar_tambah_section').show();
+        $('#nama_barang_tukar_tambah').prop('required', true);
+        $('#harga_tukar_tambah').prop('required', true);
+    } else {
+        $('#tukar_tambah_section').hide();
+        $('#nama_barang_tukar_tambah').prop('required', false);
+        $('#harga_tukar_tambah').prop('required', false);
+        $('#harga_tukar_tambah').val('');
+        $('#harga_tukar_tambah1').val('');
+    }
+    hitungSubTotal();
+    kalkulasi();
+});
+
+function hitungSubTotal() {
+    let total_pembayaran1 = parseInt($('#total_pembayaran1').val()) || 0;
+    let biaya_pengiriman1 = parseInt($('#biaya_pengiriman1').val()) || 0;
+    
+    let is_tukar = $('#is_tukar_tambah').is(':checked');
+    let harga_tukar = is_tukar ? (parseInt($('#harga_tukar_tambah1').val()) || 0) : 0;
+    
+    let hasil = total_pembayaran1 + biaya_pengiriman1 - harga_tukar;
+    
+    let convert = parseInt(hasil).toLocaleString('id-ID');
+    $('#sub_total').val(convert);
+    $('#sub_total1').val(hasil);
+}
 
 // $(document).on('keyup', '#diskon', function() {
 // let total_pembayaran1 = $('#total_pembayaran1').val();

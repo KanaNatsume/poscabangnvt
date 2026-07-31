@@ -23,62 +23,139 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Data {{ $title }}</h3>
-                            <div class="card-tools">
-                                <a href="/pengeluaran/tambah/{{ no_pengeluaran() }}" class="btn btn-success btn-sm">
-                                    <i class="fas fa-plus"></i> Tambah {{ $title }} Baru
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title m-0">Data Buku Kas</h3>
+                            <div class="card-tools d-flex align-items-center ml-auto">
+                                <form action="/pengeluaran" method="GET" class="form-inline mr-3 mb-0">
+                                    <select name="bulan" class="form-control form-control-sm mr-2">
+                                        @for($m=1; $m<=12; $m++)
+                                            <option value="{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}" {{ $bulan == str_pad($m, 2, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
+                                                {{ date('F', mktime(0, 0, 0, $m, 1)) }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                    <select name="tahun" class="form-control form-control-sm mr-2">
+                                        @for($y=date('Y')-3; $y<=date('Y'); $y++)
+                                            <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                        @endfor
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Filter</button>
+                                </form>
+                                <a href="/pengeluaran/tambah/{{ no_pengeluaran() }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus"></i> Tambah Baru
                                 </a>
                             </div>
                         </div>
-                        <div class="card-body table-responsive">
-                            <table class="table table-bordered table-striped table-hover table-sm" id="datatable">
-                                <thead class="bg-primary">
-                                    <tr>
-                                        <th style="width: 10px">#</th>
-                                        <th>No Transaksi</th>
-                                        <th>Jenis</th>
-                                        <th>Nama</th>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-sm text-center mb-0" style="white-space: nowrap;">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th colspan="10" style="font-size: 1.1rem;" class="border-bottom">{{ date('F Y', mktime(0, 0, 0, $bulan, 1, $tahun)) }}</th>
+                                    </tr>
+                                    <tr class="text-center text-muted">
+                                        <th rowspan="2" class="align-middle" style="width:3%;">Tgl</th>
+                                        <th colspan="3">Pemasukan</th>
+                                        <th colspan="3">Pengeluaran</th>
+                                        <th rowspan="2" class="align-middle">Jumlah Pemasukan</th>
+                                        <th rowspan="2" class="align-middle">Jumlah Pengeluaran</th>
+                                        <th rowspan="2" class="align-middle">Total</th>
+                                    </tr>
+                                    <tr class="text-center text-muted">
+                                        <th>Nama Transaksi</th>
+                                        <th>Harga</th>
                                         <th>Kategori</th>
-                                        <th>Jumlah</th>
-                                        <th>Keterangan</th>
-                                        <th>Tanggal</th>
-                                        <th>Aksi</th>
+                                        <th>Nama Transaksi</th>
+                                        <th>Harga</th>
+                                        <th>Kategori</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                    $no = 1;
-                                    @endphp
-                                    @foreach ($pengeluaran as $item)
-                                    <tr>
-                                        <td>{{ $no++ }}</td>
-                                        <td>{{ $item->no_pengeluaran }}</td>
-                                        <td>
-                                            @if($item->jenis == 'Pemasukan')
-                                                <span class="badge badge-success">Pemasukan</span>
-                                            @else
-                                                <span class="badge badge-danger">Pengeluaran</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $item->nama }}</td>
-                                        <td><span class="badge badge-info">{{ $item->kategori_pengeluaran ?? '-' }}</span></td>
-                                        <td>{{ number_format($item->jumlah, 0, ',', '.') }}</td>
-                                        <td>{{ $item->keterangan }}</td>
-                                        <td>{{ $item->tanggal ? date('d-m-Y', strtotime($item->tanggal)) : date('d-m-Y', strtotime($item->created_at)) }}</td>
-                                        <td>
-                                            <a href="/pengeluaran/edit/{{ $item->id }}"
-                                                class="btn btn-warning text-white btn-sm"><i class="fas fa-edit"></i>
-                                                Edit</a>
-                                            <a href="/pengeluaran/hapus/{{ $item->id }}"
-                                                onclick="return confirm('Yakin mau dihapus?!')"
-                                                class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i>
-                                                Hapus</a>
-                                        </td>
-                                    </tr>
-                                    @endforeach
+                                    @php $grand_net = 0; @endphp
+                                    @forelse($grouped as $tgl => $data)
+                                        @php
+                                            $countIn = count($data['pemasukan']);
+                                            $countOut = count($data['pengeluaran']);
+                                            $maxRows = max($countIn, $countOut);
+                                            if($maxRows == 0) $maxRows = 1;
+                                            
+                                            $sumIn = collect($data['pemasukan'])->sum('jumlah');
+                                            $sumOut = collect($data['pengeluaran'])->sum('jumlah');
+                                            $total = $sumIn - $sumOut;
+                                            $grand_net += $total;
+                                        @endphp
+                                        
+                                        @for($i = 0; $i < $maxRows; $i++)
+                                            <tr>
+                                                @if($i == 0)
+                                                    <td rowspan="{{ $maxRows }}" class="align-middle font-weight-bold text-center" style="font-size: 1.1rem;">{{ date('d', strtotime($tgl)) }}</td>
+                                                @endif
+                                                
+                                                <!-- Pemasukan -->
+                                                @if(isset($data['pemasukan'][$i]))
+                                                    <td class="text-left" style="min-width:150px;">
+                                                        <strong>{{ $data['pemasukan'][$i]->nama }}</strong>
+                                                        @if(!empty($data['pemasukan'][$i]->keterangan) && $data['pemasukan'][$i]->keterangan != '-')
+                                                            <br><small class="text-muted">{{ $data['pemasukan'][$i]->keterangan }}</small>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-right">Rp {{ number_format($data['pemasukan'][$i]->jumlah, 0, ',', '.') }}</td>
+                                                    <td>
+                                                        {{ $data['pemasukan'][$i]->kategori_pengeluaran ?? '-' }}
+                                                        <a href="/pengeluaran/hapus/{{ $data['pemasukan'][$i]->id }}" class="text-danger float-right ml-2" onclick="return confirm('Hapus baris ini?')" title="Hapus"><i class="fas fa-times"></i></a>
+                                                        <a href="/pengeluaran/edit/{{ $data['pemasukan'][$i]->id }}" class="text-primary float-right" title="Edit"><i class="fas fa-edit"></i></a>
+                                                    </td>
+                                                @else
+                                                    <td></td><td></td><td></td>
+                                                @endif
+                                                
+                                                <!-- Pengeluaran -->
+                                                @if(isset($data['pengeluaran'][$i]))
+                                                    <td class="text-left" style="min-width:150px;">
+                                                        <strong>{{ $data['pengeluaran'][$i]->nama }}</strong>
+                                                        @if(!empty($data['pengeluaran'][$i]->keterangan) && $data['pengeluaran'][$i]->keterangan != '-')
+                                                            <br><small class="text-muted">{{ $data['pengeluaran'][$i]->keterangan }}</small>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-right">Rp {{ number_format($data['pengeluaran'][$i]->jumlah, 0, ',', '.') }}</td>
+                                                    <td>
+                                                        {{ $data['pengeluaran'][$i]->kategori_pengeluaran ?? '-' }}
+                                                        <a href="/pengeluaran/hapus/{{ $data['pengeluaran'][$i]->id }}" class="text-danger float-right ml-2" onclick="return confirm('Hapus baris ini?')" title="Hapus"><i class="fas fa-times"></i></a>
+                                                        <a href="/pengeluaran/edit/{{ $data['pengeluaran'][$i]->id }}" class="text-primary float-right" title="Edit"><i class="fas fa-edit"></i></a>
+                                                    </td>
+                                                @else
+                                                    <td></td><td></td><td></td>
+                                                @endif
+                                                
+                                                @if($i == 0)
+                                                    <td rowspan="{{ $maxRows }}" class="align-middle text-right text-success font-weight-bold">
+                                                        {{ $sumIn > 0 ? 'Rp ' . number_format($sumIn, 0, ',', '.') : '' }}
+                                                    </td>
+                                                    <td rowspan="{{ $maxRows }}" class="align-middle text-right text-danger font-weight-bold">
+                                                        {{ $sumOut > 0 ? 'Rp ' . number_format($sumOut, 0, ',', '.') : '' }}
+                                                    </td>
+                                                    <td rowspan="{{ $maxRows }}" class="align-middle text-right font-weight-bold" style="font-size: 1.1rem;">
+                                                        Rp {{ number_format($total, 0, ',', '.') }}
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endfor
+                                    @empty
+                                        <tr>
+                                            <td colspan="10" class="text-center py-4">Belum ada data keuangan di bulan ini.</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
-                            </table>
+                                <tfoot>
+                                    <tr class="font-weight-bold text-center">
+                                        <th colspan="7" class="text-right">GRAND TOTAL {{ strtoupper(date('F Y', mktime(0, 0, 0, $bulan, 1, $tahun))) }}</th>
+                                        <th class="text-right text-success">Rp {{ number_format($total_pemasukan_bulan, 0, ',', '.') }}</th>
+                                        <th class="text-right text-danger">Rp {{ number_format($total_pengeluaran_bulan, 0, ',', '.') }}</th>
+                                        <th class="text-right" style="font-size: 1.2rem;">Rp {{ number_format($grand_net, 0, ',', '.') }}</th>
+                                    </tr>
+                                </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -88,8 +165,8 @@
             <div class="row mt-3">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header bg-warning">
-                            <h3 class="card-title"><i class="fas fa-chart-pie mr-2"></i>Ringkasan Saldo Keuangan per Kategori</h3>
+                        <div class="card-header border-bottom">
+                            <h3 class="card-title text-muted font-weight-bold"><i class="fas fa-chart-pie mr-2 text-primary"></i>Ringkasan Saldo Keuangan per Kategori</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">

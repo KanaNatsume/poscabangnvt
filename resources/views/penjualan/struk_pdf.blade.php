@@ -126,6 +126,18 @@
                     <td><strong>{{ number_format($penjualan->biaya_pengiriman, 0, ',', '.') }}</strong></td>
                 </tr>
                 @endif
+                @if($penjualan->is_tukar_tambah)
+                <tr>
+                    <th colspan="4" style="text-align: right;">TUKAR TAMBAH ({{ $penjualan->nama_barang_tukar_tambah }})</th>
+                    <td><strong>- {{ number_format($penjualan->harga_tukar_tambah, 0, ',', '.') }}</strong></td>
+                </tr>
+                @if($penjualan->keterangan_tukar_tambah)
+                <tr>
+                    <th colspan="4" style="text-align: right; font-weight: normal; font-size: 11px; font-style: italic;">Ket. Trade-In: {{ $penjualan->keterangan_tukar_tambah }}</th>
+                    <td></td>
+                </tr>
+                @endif
+                @endif
                 <tr>
                     <th colspan="4" style="text-align: right;">SUB TOTAL</th>
                     <td><strong>{{ number_format($penjualan->sub_total, 0, ',', '.') }}</strong></td>

@@ -13,11 +13,15 @@ class CheckRole
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $role)
+    public function handle($request, Closure $next, ...$roles)
     {
         // kita tangkap role user yg sedang login
-        if ($request->user()->role == $role) {
+        if (in_array($request->user()->role, $roles)) {
             return $next($request);
+        }
+
+        if ($request->user()->role == 'karyawan') {
+            return redirect('/absensi/karyawan')->with('forbidden', 'Anda hanya memiliki akses ke menu Absensi');
         }
 
         return redirect('/dashboard')->with('forbidden', 'Anda tidak memiliki akses');

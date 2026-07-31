@@ -66,22 +66,66 @@
     </section>
 
     <section class="section3">
+        <h4 style="font-family: sans-serif;">REKAPITULASI HARIAN</h4>
         <table>
-            <tr>
-                <th>TOTAL KEUNTUNGAN</th>
-                <td>{{ number_format($total_keuntungan, 0, ',', '.') }}</td>
-            </tr>
-            <tr>
-                <th>TOTAL PENGELUARAN</th>
-                <td>{{ number_format($total_pengeluaran, 0, ',', '.') }}</td>
-            </tr>
-            <tr>
-                <th>KEUNTUNGAN BERSIH</th>
-                @php
-                $keuntungan_bersih = $total_keuntungan - $total_pengeluaran;
-                @endphp
-                <td>{{ number_format($keuntungan_bersih, 0, ',', '.') }}</td>
-            </tr>
+            <thead>
+                <tr style="background-color: #f2f2f2;">
+                    <th>Tanggal</th>
+                    <th>Pemasukan (Omzet)</th>
+                    <th>Pengeluaran</th>
+                    <th>Keuntungan Bersih</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($daily as $date => $data)
+                <tr>
+                    <td style="text-align: center;">{{ date('d-m-Y', strtotime($date)) }}</td>
+                    <td style="text-align: right;">Rp {{ number_format($data['pemasukan'], 0, ',', '.') }}</td>
+                    <td style="text-align: right;">Rp {{ number_format($data['pengeluaran'], 0, ',', '.') }}</td>
+                    <td style="text-align: right;">Rp {{ number_format($data['pemasukan'] - $data['pengeluaran'], 0, ',', '.') }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr style="background-color: #e6e6e6; font-weight: bold;">
+                    <td style="text-align: center;">GRAND TOTAL</td>
+                    <td style="text-align: right;">Rp {{ number_format($total_pemasukan, 0, ',', '.') }}</td>
+                    <td style="text-align: right;">Rp {{ number_format($total_pengeluaran, 0, ',', '.') }}</td>
+                    <td style="text-align: right;">Rp {{ number_format($total_pemasukan - $total_pengeluaran, 0, ',', '.') }}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <br><br>
+
+        <h4 style="font-family: sans-serif;">REKAPITULASI BULANAN</h4>
+        <table>
+            <thead>
+                <tr style="background-color: #f2f2f2;">
+                    <th>Bulan</th>
+                    <th>Pemasukan (Omzet)</th>
+                    <th>Pengeluaran</th>
+                    <th>Keuntungan Bersih</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($monthly as $month => $data)
+                <tr>
+                    <td style="text-align: center;">{{ date('F Y', strtotime($month . '-01')) }}</td>
+                    <td style="text-align: right;">Rp {{ number_format($data['pemasukan'], 0, ',', '.') }}</td>
+                    <td style="text-align: right;">Rp {{ number_format($data['pengeluaran'], 0, ',', '.') }}</td>
+                    <td style="text-align: right;">Rp {{ number_format($data['pemasukan'] - $data['pengeluaran'], 0, ',', '.') }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr style="background-color: #e6e6e6; font-weight: bold;">
+                    <td style="text-align: center;">GRAND TOTAL</td>
+                    <td style="text-align: right;">Rp {{ number_format($total_pemasukan, 0, ',', '.') }}</td>
+                    <td style="text-align: right;">Rp {{ number_format($total_pengeluaran, 0, ',', '.') }}</td>
+                    <td style="text-align: right;">Rp {{ number_format($total_pemasukan - $total_pengeluaran, 0, ',', '.') }}</td>
+                </tr>
+            </tfoot>
         </table>
     </section>
 </body>

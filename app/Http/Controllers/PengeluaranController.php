@@ -12,10 +12,40 @@ class PengeluaranController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $title = 'Pencatatan Keuangan';
-        $pengeluaran = Pengeluaran::orderBy('id', 'desc')->get();
+        
+        $bulan = $request->bulan ?? date('m');
+        $tahun = $request->tahun ?? date('Y');
+
+        $pengeluaranRaw = Pengeluaran::whereMonth('tanggal', $bulan)
+                            ->whereYear('tanggal', $tahun)
+                            ->orderBy('tanggal', 'desc')
+                            ->orderBy('id', 'asc')
+                            ->get();
+
+        $grouped = [];
+        $total_pemasukan_bulan = 0;
+        $total_pengeluaran_bulan = 0;
+
+        foreach ($pengeluaranRaw as $item) {
+            $tgl = $item->tanggal ? date('Y-m-d', strtotime($item->tanggal)) : date('Y-m-d', strtotime($item->created_at));
+            if (!isset($grouped[$tgl])) {
+                $grouped[$tgl] = ['pemasukan' => [], 'pengeluaran' => []];
+            }
+            if ($item->jenis == 'Pemasukan') {
+                $grouped[$tgl]['pemasukan'][] = $item;
+                $total_pemasukan_bulan += $item->jumlah;
+            } else {
+                $grouped[$tgl]['pengeluaran'][] = $item;
+                $total_pengeluaran_bulan += $item->jumlah;
+            }
+        }
+        
+        krsort($grouped);
+
+        // Kategori Summary (optional but nice to keep)
         $kategori_list = ['Toko','Kesra','Penjualan','Pembelian','Service','A Kevin','Kantor','Sisa'];
         $total_per_kategori = [];
         foreach ($kategori_list as $kat) {
@@ -23,7 +53,8 @@ class PengeluaranController extends Controller
             $pengeluaran_jml = Pengeluaran::where('kategori_pengeluaran', $kat)->where('jenis', 'Pengeluaran')->sum('jumlah');
             $total_per_kategori[$kat] = $pemasukan - $pengeluaran_jml;
         }
-        return view('pengeluaran.index', compact('title', 'pengeluaran', 'total_per_kategori', 'kategori_list'));
+
+        return view('pengeluaran.index', compact('title', 'grouped', 'bulan', 'tahun', 'total_pemasukan_bulan', 'total_pengeluaran_bulan', 'total_per_kategori', 'kategori_list'));
     }
 
     /**

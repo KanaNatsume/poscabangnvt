@@ -42,7 +42,16 @@ class ReturBarangController extends Controller
             ->where('detail_retur_barang.no_retur', $no_retur)
             ->orderBy('detail_retur_barang.id', 'desc')
             ->get();
-        return view('return_barang.create', compact('title', 'penjualan', 'barang', 'pelanggan', 'detail_retur_barang'));
+        $auto_pelanggan_id = null;
+        if ($detail_retur_barang->isNotEmpty()) {
+            $first_item = $detail_retur_barang->first();
+            $penj_header = Penjualan::where('no_invoice', $first_item->no_invoice)->first();
+            if ($penj_header) {
+                $auto_pelanggan_id = $penj_header->pelanggan_id;
+            }
+        }
+
+        return view('return_barang.create', compact('title', 'penjualan', 'barang', 'pelanggan', 'detail_retur_barang', 'auto_pelanggan_id'));
     }
 
     /**
@@ -60,7 +69,18 @@ class ReturBarangController extends Controller
         $return_barang->pembayaran = $request->pembayaran;
         $return_barang->kembalian = $request->kembalian;
         $return_barang->save();
-        return redirect('/retur/tambah/' . no_retur())->with('success', 'Data retur berhasil tersimpan');
+
+        // Kembalikan stok barang ke gudang
+        $detail_retur = DetailReturBarang::where('no_retur', $request->no_retur)->get();
+        foreach ($detail_retur as $item) {
+            $barang = Barang::where('kode_barang', $item->kode_barang)->first();
+            if ($barang) {
+                $barang->stok = $barang->stok + $item->qty;
+                $barang->save();
+            }
+        }
+
+        return redirect('/retur/tambah/' . no_retur())->with('success', 'Data retur berhasil tersimpan dan stok telah dikembalikan');
     }
 
     /**
@@ -154,5 +174,46 @@ class ReturBarangController extends Controller
         $row = DetailReturBarang::find($id);
         $row->delete();
         return redirect('/retur/tambah/' . $row->no_retur);
+    }
+
+    public function tarik_invoice(Request $request)
+    {
+        $detail_penjualan = DB::table('detail_penjualan')
+            ->where('no_invoice', $request->no_invoice)
+            ->get();
+
+        if ($detail_penjualan->isEmpty()) {
+            return redirect('/retur/tambah/' . $request->no_retur)->with('error', 'Invoice tidak ditemukan atau kosong.');
+        }
+
+        foreach ($detail_penjualan as $dp) {
+            $cek = DetailReturBarang::where('no_retur', $request->no_retur)
+                ->where('kode_barang', $dp->kode_barang)
+                ->first();
+                
+            if (!$cek) {
+                $retur = new DetailReturBarang();
+                $retur->no_retur = $request->no_retur;
+                $retur->no_invoice = $request->no_invoice;
+                $retur->kode_barang = $dp->kode_barang;
+                $retur->harga = $dp->harga;
+                $retur->qty = $dp->qty;
+                $retur->jenis = $dp->jenis;
+                $retur->keterangan = $request->keterangan ?? 'Retur dari invoice';
+                $retur->save();
+            }
+        }
+        return redirect('/retur/tambah/' . $request->no_retur)->with('success', 'Barang dari invoice berhasil ditarik');
+    }
+
+    public function update_qty(Request $request, $id)
+    {
+        $row = DetailReturBarang::find($id);
+        if ($row) {
+            $row->qty = $request->qty;
+            $row->save();
+            return redirect('/retur/tambah/' . $row->no_retur)->with('success', 'QTY berhasil diupdate');
+        }
+        return back()->with('error', 'Item tidak ditemukan');
     }
 }

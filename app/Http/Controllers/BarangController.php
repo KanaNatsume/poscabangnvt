@@ -24,7 +24,11 @@ class BarangController extends Controller
                 ->where('kode_barang', $item->kode_barang)
                 ->sum('qty');
 
-            $item->jumlah_terjual = $jumlah_terjual;
+            $jumlah_retur = DB::table('detail_retur_barang')
+                ->where('kode_barang', $item->kode_barang)
+                ->sum('qty');
+
+            $item->jumlah_terjual = $jumlah_terjual - $jumlah_retur;
         }
         return view('barang.index', compact('title', 'barang'));
     }

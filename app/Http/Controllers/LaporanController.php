@@ -500,18 +500,44 @@ class LaporanController extends Controller
         $tanggal_awal3 = $request->tanggal_awal . " 00:00:00";
         $tanggal_akhir3 = $request->tanggal_akhir . " 23:59:59";
 
-        $total_keuntungan = 0;
-        $keuntungan = DB::table('detail_penjualan')->whereBetween('created_at', [$tanggal_awal3, $tanggal_akhir3])->get();
-        foreach ($keuntungan as $value) {
-            $total_keuntungan += $value->qty * $value->profit - $value->potongan;
+        $penjualan = DB::table('penjualan')->whereBetween('created_at', [$tanggal_awal3, $tanggal_akhir3])->get();
+        $pengeluaran = DB::table('pengeluaran')->whereBetween('created_at', [$tanggal_awal3, $tanggal_akhir3])->get();
+
+        $daily = [];
+        $monthly = [];
+        $total_pemasukan = 0;
+        $total_pengeluaran = 0;
+
+        foreach($penjualan as $p) {
+            $date = date('Y-m-d', strtotime($p->created_at));
+            $month = date('Y-m', strtotime($p->created_at));
+
+            if(!isset($daily[$date])) $daily[$date] = ['pemasukan' => 0, 'pengeluaran' => 0];
+            $daily[$date]['pemasukan'] += $p->total_pembayaran;
+
+            if(!isset($monthly[$month])) $monthly[$month] = ['pemasukan' => 0, 'pengeluaran' => 0];
+            $monthly[$month]['pemasukan'] += $p->total_pembayaran;
+
+            $total_pemasukan += $p->total_pembayaran;
         }
 
-        $total_pengeluaran = 0;
-        $pengeluaran = DB::table('pengeluaran')->whereBetween('created_at', [$tanggal_awal3, $tanggal_akhir3])->get();
-        foreach ($pengeluaran as $value) {
-            $total_pengeluaran += $value->jumlah;
+        foreach($pengeluaran as $p) {
+            $date = date('Y-m-d', strtotime($p->created_at));
+            $month = date('Y-m', strtotime($p->created_at));
+
+            if(!isset($daily[$date])) $daily[$date] = ['pemasukan' => 0, 'pengeluaran' => 0];
+            $daily[$date]['pengeluaran'] += $p->jumlah;
+
+            if(!isset($monthly[$month])) $monthly[$month] = ['pemasukan' => 0, 'pengeluaran' => 0];
+            $monthly[$month]['pengeluaran'] += $p->jumlah;
+
+            $total_pengeluaran += $p->jumlah;
         }
-        return view('laporan.keuangan_cari', compact('title', 'total_keuntungan', 'total_pengeluaran', 'tanggal_awal1', 'tanggal_akhir1', 'tanggal_awal2', 'tanggal_akhir2'));
+
+        ksort($daily);
+        ksort($monthly);
+
+        return view('laporan.keuangan_cari', compact('title', 'total_pemasukan', 'total_pengeluaran', 'daily', 'monthly', 'tanggal_awal1', 'tanggal_akhir1', 'tanggal_awal2', 'tanggal_akhir2'));
     }
 
     public function keuangan_download(Request $request)
@@ -521,21 +547,46 @@ class LaporanController extends Controller
         $tanggal_akhir1 = date('d-m-Y', strtotime($request->tanggal_akhir));
         $tanggal_awal2 = $request->tanggal_awal . " 00:00:00";
         $tanggal_akhir2 = $request->tanggal_akhir . " 23:59:59";
-        $total_keuntungan = 0;
-        $keuntungan = DB::table('detail_penjualan')->whereBetween('created_at', [$tanggal_awal2, $tanggal_akhir2])->get();
-        foreach ($keuntungan as $value) {
-            $total_keuntungan += $value->qty * $value->profit - $value->potongan;
+        
+        $penjualan = DB::table('penjualan')->whereBetween('created_at', [$tanggal_awal2, $tanggal_akhir2])->get();
+        $pengeluaran = DB::table('pengeluaran')->whereBetween('created_at', [$tanggal_awal2, $tanggal_akhir2])->get();
+
+        $daily = [];
+        $monthly = [];
+        $total_pemasukan = 0;
+        $total_pengeluaran = 0;
+
+        foreach($penjualan as $p) {
+            $date = date('Y-m-d', strtotime($p->created_at));
+            $month = date('Y-m', strtotime($p->created_at));
+
+            if(!isset($daily[$date])) $daily[$date] = ['pemasukan' => 0, 'pengeluaran' => 0];
+            $daily[$date]['pemasukan'] += $p->total_pembayaran;
+
+            if(!isset($monthly[$month])) $monthly[$month] = ['pemasukan' => 0, 'pengeluaran' => 0];
+            $monthly[$month]['pemasukan'] += $p->total_pembayaran;
+
+            $total_pemasukan += $p->total_pembayaran;
         }
 
-        $total_pengeluaran = 0;
-        $pengeluaran = DB::table('pengeluaran')->whereBetween('created_at', [$tanggal_awal2, $tanggal_akhir2])->get();
-        foreach ($pengeluaran as $value) {
-            $total_pengeluaran += $value->jumlah;
+        foreach($pengeluaran as $p) {
+            $date = date('Y-m-d', strtotime($p->created_at));
+            $month = date('Y-m', strtotime($p->created_at));
+
+            if(!isset($daily[$date])) $daily[$date] = ['pemasukan' => 0, 'pengeluaran' => 0];
+            $daily[$date]['pengeluaran'] += $p->jumlah;
+
+            if(!isset($monthly[$month])) $monthly[$month] = ['pemasukan' => 0, 'pengeluaran' => 0];
+            $monthly[$month]['pengeluaran'] += $p->jumlah;
+
+            $total_pengeluaran += $p->jumlah;
         }
-        // dd($penjualan);
-        $pdf = PDF::loadView('laporan.keuangan_download', compact('title', 'total_keuntungan', 'total_pengeluaran', 'tanggal_awal1', 'tanggal_akhir1'))->setPaper('a4', 'landscape');
+
+        ksort($daily);
+        ksort($monthly);
+
+        $pdf = PDF::loadView('laporan.keuangan_download', compact('title', 'total_pemasukan', 'total_pengeluaran', 'daily', 'monthly', 'tanggal_awal1', 'tanggal_akhir1'))->setPaper('a4', 'landscape');
         return $pdf->download('LAPORAN-KEUANGAN-' . $tanggal_awal1 . '-SAMPAI-' . $tanggal_akhir1  . '.pdf');
-        // return view('laporan.keuangan_download', compact('title', 'total_keuntungan', 'total_pengeluaran', 'tanggal_awal1', 'tanggal_akhir1'));
     }
 
     public function stok_barang()

@@ -39,6 +39,7 @@
                                             <th style="width: 10px">#</th>
                                             <th>Nama</th>
                                             <th>Email</th>
+                                            <th>Gaji Pokok</th>
                                             <th>Photo</th>
                                             <th>Role</th>
                                             <th>Aksi</th>
@@ -53,15 +54,17 @@
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ $item->email }}</td>
+                                                <td>Rp {{ number_format($item->gaji_pokok ?? 0, 0, ',', '.') }}</td>
                                                 <td>
                                                     <a href="{{ asset('photo/' . $item->photo) }}" target="_blank">
                                                         <img src="{{ asset('photo/' . $item->photo) }}" width="100">
                                                     </a>
                                                 </td>
-                                                <td>{{ $item->role }}</td>
+                                                <td><span class="badge badge-info">{{ ucfirst($item->role) }}</span></td>
                                                 <td>
                                                     <button type="button" id="btnEdit" data-id="{{ $item->id }}"
                                                         data-nama="{{ $item->name }}" data-email="{{ $item->email }}"
+                                                        data-role="{{ $item->role }}" data-gaji="{{ number_format($item->gaji_pokok ?? 0, 0, ',', '.') }}"
                                                         class="btn btn-warning text-white btn-sm" data-toggle="modal"
                                                         data-target="#modalEdit"><i class="fas fa-edit"></i>
                                                         Edit</button>
@@ -111,6 +114,22 @@
                                 </div>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select name="role" class="form-control form-control-sm" id="role" required>
+                                <option value="kasir">Kasir (Bisa akses POS Penjualan)</option>
+                                <option value="karyawan">Karyawan (Hanya Absensi)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gaji_pokok">Gaji Pokok / Bulan (Opsional)</label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Rp</span>
+                                </div>
+                                <input type="text" name="gaji_pokok" class="form-control" id="gaji_pokok" value="0">
+                            </div>
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
@@ -143,6 +162,22 @@
                             <input type="email" name="editEmail" class="form-control form-control-sm" id="editEmail"
                                 required>
                         </div>
+                        <div class="form-group">
+                            <label for="editRole">Role</label>
+                            <select name="editRole" class="form-control form-control-sm" id="editRole" required>
+                                <option value="kasir">Kasir (Bisa akses POS Penjualan)</option>
+                                <option value="karyawan">Karyawan (Hanya Absensi)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editGajiPokok">Gaji Pokok / Bulan (Opsional)</label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Rp</span>
+                                </div>
+                                <input type="text" name="editGajiPokok" class="form-control" id="editGajiPokok" value="0">
+                            </div>
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
@@ -158,10 +193,24 @@
             let id_user = $(this).data('id');
             let nama_user = $(this).data('nama');
             let email = $(this).data('email');
+            let role = $(this).data('role');
+            let gaji = $(this).data('gaji');
 
             $('#formEdit').attr('action', '/user/' + id_user + '/update');
             $('#editName').val(nama_user);
             $('#editEmail').val(email);
+            $('#editRole').val(role);
+            $('#editGajiPokok').val(gaji);
+        });
+
+        // Format Rupiah
+        $('#gaji_pokok, #editGajiPokok').on('keyup', function() {
+            let val = $(this).val().replace(/[^0-9]/g, '');
+            if(val) {
+                $(this).val(new Intl.NumberFormat('id-ID').format(val));
+            } else {
+                $(this).val('');
+            }
         });
     </script>
 

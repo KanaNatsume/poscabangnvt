@@ -63,7 +63,7 @@ Route::group(['middleware' => ['auth', 'check.role:admin']], function () {
     Route::get('/bank/{id}/destroy', 'BankController@destroy');
 });
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'check.role:admin,kasir']], function () {
     Route::get('/dashboard', 'DashboardController@index');
     Route::get('/dashboard/penjualan', 'DashboardController@penjualan');
     Route::get('/dashboard/profit', 'DashboardController@profit');
@@ -71,9 +71,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard/barang', 'DashboardController@barang');
     Route::get('/dashboard/chart', 'DashboardController@chart');
 
-    Route::get('/profile', 'UserController@profile');
-    Route::post('/profile', 'UserController@update_profile');
-    Route::post('/updatepassword', 'UserController@update_password');
     Route::get('/pelanggan', 'PelangganController@index');
     Route::post('/pelanggan', 'PelangganController@store');
     Route::post('/pelanggan/ajax', 'PelangganController@storeAjax');
@@ -101,7 +98,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/retur/detail/{id}', 'ReturBarangController@detail');
     Route::get('/retur/detail/download/{id}', 'ReturBarangController@download');
     Route::get('/retur/{id}/hapus_detail_retur_barang', 'ReturBarangController@hapus_detail_retur_barang');
-
+    Route::post('/retur/tarik_invoice', 'ReturBarangController@tarik_invoice');
+    Route::post('/retur/update_qty/{id}', 'ReturBarangController@update_qty');
     Route::get('/pengeluaran', 'PengeluaranController@index');
     Route::get('/pengeluaran/tambah/{no_pengeluaran}', 'PengeluaranController@create');
     Route::post('/pengeluaran', 'PengeluaranController@store');
@@ -160,7 +158,32 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/laporan/keuangan', 'LaporanController@keuangan');
     Route::get('/laporan/keuangan_cari', 'LaporanController@keuangan_cari');
     Route::post('/laporan/keuangan_download', 'LaporanController@keuangan_download');
+});
 
+// Rute umum untuk semua role (admin, kasir, karyawan)
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/profile', 'UserController@profile');
+    Route::post('/profile', 'UserController@update_profile');
+    Route::post('/updatepassword', 'UserController@update_password');
+
+    // Karyawan (Absensi)
+    Route::get('/absensi/karyawan', 'AbsensiController@karyawan');
+    Route::post('/absensi/karyawan/absen', 'AbsensiController@absen');
+});
+
+// Rute khusus admin
+Route::group(['middleware' => ['auth', 'check.role:admin']], function () {
+    Route::get('/pengaturan-absensi', 'PengaturanAbsensiController@index');
+    Route::post('/pengaturan-absensi', 'PengaturanAbsensiController@update');
+    
+    Route::get('/absensi', 'AbsensiController@index');
+    Route::post('/absensi/store', 'AbsensiController@admin_store');
+    Route::post('/absensi/update/{id}', 'AbsensiController@admin_update');
+    Route::get('/absensi/destroy/{id}', 'AbsensiController@admin_destroy');
+    Route::get('/penggajian', 'PenggajianController@index');
+});
+
+Route::group(['middleware' => ['auth', 'check.role:admin,kasir']], function () {
     Route::get('/laporan/stok_barang', 'LaporanController@stok_barang');
     Route::get('/laporan/stok_barang_download_pdf', 'LaporanController@stok_barang_download_pdf');
 

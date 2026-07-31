@@ -89,6 +89,12 @@ class PenjualanController extends Controller
             }
             $penjualan->biaya_pengiriman = $request->biaya_pengiriman;
             $penjualan->keterangan = $request->keterangan;
+            $penjualan->is_tukar_tambah = $request->has('is_tukar_tambah') ? 1 : 0;
+            if ($request->has('is_tukar_tambah')) {
+                $penjualan->nama_barang_tukar_tambah = $request->nama_barang_tukar_tambah;
+                $penjualan->harga_tukar_tambah = $request->harga_tukar_tambah;
+                $penjualan->keterangan_tukar_tambah = $request->keterangan_tukar_tambah;
+            }
             if ($request->hasFile('bukti_transfer')) {
                 $bukti_transfer = $request->file('bukti_transfer');
                 $nama_bukti_transfer = time() . '_' . $bukti_transfer->getClientOriginalName();
@@ -108,6 +114,12 @@ class PenjualanController extends Controller
             $penjualan->kembalian = $request->kembalian;
             $penjualan->jenis = $request->jenis;
             $penjualan->keterangan = $request->keterangan;
+            $penjualan->is_tukar_tambah = $request->has('is_tukar_tambah') ? 1 : 0;
+            if ($request->has('is_tukar_tambah')) {
+                $penjualan->nama_barang_tukar_tambah = $request->nama_barang_tukar_tambah;
+                $penjualan->harga_tukar_tambah = $request->harga_tukar_tambah;
+                $penjualan->keterangan_tukar_tambah = $request->keterangan_tukar_tambah;
+            }
             $penjualan->save();
 
             $hutang = new Hutang;

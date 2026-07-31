@@ -26,71 +26,30 @@
                         <div class="card-header">
                             <h3 class="card-title">No. Retur <strong>{{ request()->segment(3) }}</strong></h3>
                         </div>
-                        <form action="/retur/detail_retur_barang" method="POST">
+                        <form action="/retur/tarik_invoice" method="POST">
                             @csrf
                             <input type="hidden" name="no_retur" value="{{ request()->segment(3) }}">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <label for="no_invoice">No Invoice</label>
-                                            <select name="no_invoice" id="no_invoice"
-                                                class="form-control form-control-sm select2bs4" required>
-                                                <option value="">Pilih</option>
+                                <div class="row align-items-end">
+                                    <div class="col-md-5">
+                                        <div class="form-group mb-0">
+                                            <label for="no_invoice">No Invoice yang Akan Diretur</label>
+                                            <select name="no_invoice" id="no_invoice" class="form-control select2bs4" required>
+                                                <option value="">-- Pilih No Invoice --</option>
                                                 @foreach ($penjualan as $item)
                                                 <option value="{{ $item->no_invoice }}">{{ $item->no_invoice }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="kode_barang">Pilih Barang</label>
-                                            <select name="kode_barang" id="kode_barang"
-                                                class="form-control form-control-sm select2bs4" required>
-                                                <option value="">Pilih</option>
-                                                @foreach ($barang as $item)
-                                                <option value="{{ $item->kode_barang }}"
-                                                    data-harga_ecer="{{ $item->harga_ecer }}"
-                                                    data-harga_grosir="{{ $item->harga_grosir }}"
-                                                    data-harga_agen="{{ $item->harga_agen }}">{{ $item->kode_barang }} -
-                                                    {{ $item->nama_barang }}</option>
-                                                @endforeach
-                                            </select>
+                                    <div class="col-md-5">
+                                        <div class="form-group mb-0">
+                                            <label for="keterangan">Keterangan Umum (Opsional)</label>
+                                            <input type="text" name="keterangan" class="form-control" id="keterangan" placeholder="Contoh: Barang cacat, garansi, dll">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <label for="harga">Pilih Jenis Harga</label>
-                                        <select name="harga" id="harga" class="form-control select2bs4" required>
-                                            <option value="">Pilih</option>
-                                            <option value="" id="harga_ecer">
-                                                Ecer <span id="harga_ecer1"> </span>
-                                            </option>
-                                            <option value="" id="harga_grosir">
-                                                Grosir <span id="harga_grosir1"> </span>
-                                            </option>
-                                            <option value="" id="harga_agen">
-                                                Agen <span id="harga_agen1"> </span>
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <div class="form-group">
-                                            <label for="qty">qty</label>
-                                            <input type="text" name="qty" class="form-control" id="qty">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="keterangan">Keterangan</label>
-                                            <input type="text" name="keterangan" class="form-control" id="keterangan">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-primary"
-                                                style="margin-top: 30px">Tambahkan</button>
-                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-block">Tarik Data</button>
                                     </div>
                                 </div>
                             </div>
@@ -138,7 +97,13 @@
                                         <td>{{ $item->jenis }}</td>
                                         <td>{{ $item->keterangan }}</td>
                                         <td>{{ $item->harga }}</td>
-                                        <td>{{ $item->qty }}</td>
+                                        <td>
+                                            <form action="/retur/update_qty/{{ $item->id }}" method="POST" class="d-flex">
+                                                @csrf
+                                                <input type="number" name="qty" value="{{ $item->qty }}" class="form-control form-control-sm" style="width: 70px; margin-right: 5px;" min="1" required>
+                                                <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button>
+                                            </form>
+                                        </td>
                                         <td>{{ number_format($total_harga, 0, ',', '.') }}</td>
                                         <td>
                                             <a href="/retur/{{ $item->id }}/hapus_detail_retur_barang"
@@ -172,7 +137,7 @@
                                             required>
                                             <option value="">Pilih</option>
                                             @foreach ($pelanggan as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}
+                                            <option value="{{ $item->id }}" {{ (isset($auto_pelanggan_id) && $auto_pelanggan_id == $item->id) ? 'selected' : '' }}>{{ $item->nama }}
                                             </option>
                                             @endforeach
                                         </select>
