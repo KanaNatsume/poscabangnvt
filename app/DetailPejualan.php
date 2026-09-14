@@ -12,5 +12,9 @@ class DetailPejualan extends Model
         'kode_barang',
         'harga',
         'qty',
+        'potongan',
+        'total_harga',
+        'jenis',
+        'profit',
     ];
 }

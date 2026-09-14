@@ -65,15 +65,14 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="potongan">Potongan</label>
-                                                <input type="text" class="form-control" id="potongan" autocomplete="off"
-                                                    required>
-                                                <input type="hidden" name="potongan" id="potongan1" required>
+                                                <input type="text" class="form-control" id="potongan" autocomplete="off">
+                                                <input type="hidden" name="potongan" id="potongan1" value="0">
                                             </div>
                                         </div>
                                         <div class="col-md-1">
                                             <div class="form-group">
                                                 <label for="qty">QTY</label>
-                                                <input type="number" name="qty" class="form-control" id="qty" required>
+                                                <input type="number" name="qty" class="form-control" id="qty" value="1" min="1" required>
                                             </div>
                                         </div>
                                         <div class="col-md-1">

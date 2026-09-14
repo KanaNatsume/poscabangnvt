@@ -149,54 +149,58 @@ class PenjualanController extends Controller
      */
     public function detail_penjualan(Request $request)
     {
-        $harga_jual = $request->harga;
         $kode_barang = explode("/", $request->kode_barang);
-        $barang = Barang::where('kode_barang', $kode_barang[0])->first();
+        $barang = Barang::where('kode_barang', trim($kode_barang[0]))->first();
         if (!$barang) {
             return redirect('/penjualan/' . $request->no_invoice)->with('warning', 'Barang tidak ditemukan');
         }
 
-        $cek_kode_barang = DetailPejualan::where('kode_barang', $kode_barang[0])->where('no_invoice', $request->no_invoice)->first();
+        $harga_jual = ($request->harga !== null && $request->harga !== '') 
+            ? (int)str_replace('.', '', $request->harga) 
+            : (int)$barang->harga_ecer;
+        $qty = max(1, (int)$request->qty);
+        $potongan = ($request->potongan !== null && $request->potongan !== '') 
+            ? (int)str_replace('.', '', $request->potongan) 
+            : 0;
+        $profit = isset($barang->profit_harga_ecer) ? (int)$barang->profit_harga_ecer : max(0, $harga_jual - (int)$barang->harga_beli);
+
+        $cek_kode_barang = DetailPejualan::where('kode_barang', $barang->kode_barang)->where('no_invoice', $request->no_invoice)->first();
         
         if ($cek_kode_barang) {
-            $update_stok_barang = Barang::where('kode_barang', $kode_barang[0])->first();
-
-            $cek_kode_barang->qty = $cek_kode_barang->qty + $request->qty;
-            $cek_kode_barang->potongan = $cek_kode_barang->potongan + $request->potongan;
+            $cek_kode_barang->qty = $cek_kode_barang->qty + $qty;
+            $cek_kode_barang->potongan = (int)$cek_kode_barang->potongan + $potongan;
             $cek_kode_barang->total_harga = ($harga_jual * $cek_kode_barang->qty) - $cek_kode_barang->potongan;
             $cek_kode_barang->save();
 
-            if (!$update_stok_barang->is_jasa) {
-                $update_stok_barang->stok = $update_stok_barang->stok - $request->qty;
-                $update_stok_barang->save();
+            if (isset($barang->is_jasa) && !$barang->is_jasa) {
+                $barang->stok = $barang->stok - $qty;
+                $barang->save();
 
-                if ($update_stok_barang->stok <= $update_stok_barang->stok_minimal) {
-                    return redirect('/penjualan/' . $request->no_invoice)->with('warning', 'Stok kode barang ' . $update_stok_barang->kode_barang . ' sudah kurang dari minimal stok, harap segera tambahkan stok barang tersebut');
+                if ($barang->stok <= $barang->stok_minimal) {
+                    return redirect('/penjualan/' . $request->no_invoice)->with('warning', 'Stok kode barang ' . $barang->kode_barang . ' sudah kurang dari minimal stok, harap segera tambahkan stok barang tersebut');
                 }
             }
 
             return redirect('/penjualan/' . $request->no_invoice);
 
         } else {
-            $update_stok_barang = Barang::where('kode_barang', $kode_barang[0])->first();
-
             $detail_penjualan = new DetailPejualan;
             $detail_penjualan->no_invoice = $request->no_invoice;
-            $detail_penjualan->kode_barang = $kode_barang[0];
+            $detail_penjualan->kode_barang = $barang->kode_barang;
             $detail_penjualan->harga = $harga_jual;
-            $detail_penjualan->qty = $request->qty;
-            $detail_penjualan->potongan = $request->potongan;
-            $detail_penjualan->total_harga = ($harga_jual * $request->qty) - $request->potongan;
+            $detail_penjualan->qty = $qty;
+            $detail_penjualan->potongan = $potongan;
+            $detail_penjualan->total_harga = ($harga_jual * $qty) - $potongan;
             $detail_penjualan->jenis = 'jual'; // default label for one price
-            $detail_penjualan->profit = $barang->profit_harga_ecer;
+            $detail_penjualan->profit = $profit;
             $detail_penjualan->save();
 
-            if (!$update_stok_barang->is_jasa) {
-                $update_stok_barang->stok = $update_stok_barang->stok - $request->qty;
-                $update_stok_barang->save();
+            if (isset($barang->is_jasa) && !$barang->is_jasa) {
+                $barang->stok = $barang->stok - $qty;
+                $barang->save();
 
-                if ($update_stok_barang->stok <= $update_stok_barang->stok_minimal) {
-                    return redirect('/penjualan/' . $request->no_invoice)->with('warning', 'Stok kode barang ' . $update_stok_barang->kode_barang . ' sudah kurang dari minimal stok, harap segera tambahkan stok barang tersebut');
+                if ($barang->stok <= $barang->stok_minimal) {
+                    return redirect('/penjualan/' . $request->no_invoice)->with('warning', 'Stok kode barang ' . $barang->kode_barang . ' sudah kurang dari minimal stok, harap segera tambahkan stok barang tersebut');
                 }
             }
 
@@ -214,9 +218,13 @@ class PenjualanController extends Controller
     {
         $detail_penjualan = DetailPejualan::find($id);
 
+        if (!$detail_penjualan) {
+            return redirect()->back();
+        }
+
         $update_stok_barang = Barang::where('kode_barang', $detail_penjualan->kode_barang)->first();
         // Only restore stock for physical items, not services
-        if ($update_stok_barang && !$update_stok_barang->is_jasa) {
+        if ($update_stok_barang && (isset($update_stok_barang->is_jasa) && !$update_stok_barang->is_jasa)) {
             $update_stok_barang->stok = $update_stok_barang->stok + $detail_penjualan->qty;
             $update_stok_barang->save();
         }
