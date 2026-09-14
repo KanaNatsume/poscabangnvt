@@ -164,16 +164,19 @@
                                             <div class="form-group">
                                                 <label for="sub_total">Sub Total</label>
                                                 <input type="text" class="form-control form-control-lg" id="sub_total"
+                                                    value="{{ number_format($total_keseluruhan_harga, 0, ',', '.') }}"
                                                     readonly required>
-                                                <input type="hidden" name="sub_total" id="sub_total1" readonly>
+                                                <input type="hidden" name="sub_total" id="sub_total1"
+                                                    value="{{ $total_keseluruhan_harga }}" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="kembalian">Kembalian</label>
                                                 <input type="text" class="form-control form-control-lg" id="kembalian"
+                                                    value="0"
                                                     readonly required>
-                                                <input type="hidden" name="kembalian" id="kembalian1" readonly>
+                                                <input type="hidden" name="kembalian" id="kembalian1" value="0" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -218,8 +221,8 @@
                                             <div class="form-group">
                                                 <label for="biaya_pengiriman">Biaya Pengiriman</label>
                                                 <input type="text" class="form-control" id="biaya_pengiriman"
-                                                    autocomplete="off" required>
-                                                <input type="hidden" name="biaya_pengiriman" id="biaya_pengiriman1">
+                                                    autocomplete="off">
+                                                <input type="hidden" name="biaya_pengiriman" id="biaya_pengiriman1" value="0">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -227,7 +230,7 @@
                                                 <label for="pembayaran">Pembayaran</label>
                                                 <input type="text" class="form-control" id="pembayaran"
                                                     onkeyup="kalkulasi()" autocomplete="off" required>
-                                                <input type="hidden" name="pembayaran" id="pembayaran1">
+                                                <input type="hidden" name="pembayaran" id="pembayaran1" value="0">
                                             </div>
                                         </div>
                                     </div>
@@ -573,28 +576,31 @@ $('#kembalian').val(convert);
 $('#kembalian1').val(hasil);
 // }
 }
+
+$(document).ready(function() {
+    hitungSubTotal();
+    kalkulasi();
+});
 </script>
 
 <script>
     $(document).on('click', '#btnSimpan', function () {
          let jenis = $('#jenis').val();
-         let biaya_pengiriman = $('#biaya_pengiriman').val();
-         let diskon = $('#diskon').val();
          let pembayaran = $('#pembayaran').val();
          let bukti_transfer = $('#bukti_transfer').val();
-         let no_invoice = $('#no_invoice').val();
 
-         if(jenis == '') {
+         $('.is-invalid').removeClass('is-invalid');
+
+         if(!jenis || jenis == '') {
              $('#jenis').addClass('is-invalid');
-         } else if(biaya_pengiriman == '') {
-             $('#biaya_pengiriman').addClass('is-invalid');
-         } else if(diskon == '') {
-             $('#diskon').addClass('is-invalid');
-         } else if(pembayaran == '') {
+             return false;
+         } else if(!pembayaran || pembayaran == '') {
              $('#pembayaran').addClass('is-invalid');
-         } else if(bukti_transfer == '') {
+             return false;
+         } else if(jenis == 'transfer' && (!bukti_transfer || bukti_transfer == '')) {
              $('#bukti_transfer').addClass('is-invalid');
-         }  else {
+             return false;
+         } else {
              $('#btnSimpan').addClass('d-none');
              $('.loading').html(`
                 <button class="btn btn-primary btn-block" type="button" disabled>

@@ -66,16 +66,24 @@ class PenjualanController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        // Sanitize numeric and nullable inputs to avoid empty string SQL errors
+        $pelanggan_id = $request->pelanggan_id ?: null;
+        $total_pembayaran = $request->total_pembayaran ? (int)str_replace('.', '', $request->total_pembayaran) : 0;
+        $sub_total = ($request->sub_total !== null && $request->sub_total !== '') ? (int)str_replace('.', '', $request->sub_total) : $total_pembayaran;
+        $pembayaran = ($request->pembayaran !== null && $request->pembayaran !== '') ? (int)str_replace('.', '', $request->pembayaran) : 0;
+        $kembalian = ($request->kembalian !== null && $request->kembalian !== '') ? (int)str_replace('.', '', $request->kembalian) : 0;
+        $biaya_pengiriman = ($request->biaya_pengiriman !== null && $request->biaya_pengiriman !== '') ? (int)str_replace('.', '', $request->biaya_pengiriman) : 0;
+        $harga_tukar_tambah = ($request->harga_tukar_tambah !== null && $request->harga_tukar_tambah !== '') ? (int)str_replace('.', '', $request->harga_tukar_tambah) : null;
+
         if ($request->jenis != 'hutang') {
             $penjualan = new Penjualan;
             $penjualan->user_id = Auth::user()->id;
-            $penjualan->pelanggan_id = $request->pelanggan_id;
+            $penjualan->pelanggan_id = $pelanggan_id;
             $penjualan->no_invoice = $request->no_invoice;
-            $penjualan->total_pembayaran = $request->total_pembayaran;
-            $penjualan->sub_total = $request->sub_total;
-            $penjualan->pembayaran = $request->pembayaran;
-            $penjualan->kembalian = $request->kembalian;
+            $penjualan->total_pembayaran = $total_pembayaran;
+            $penjualan->sub_total = $sub_total;
+            $penjualan->pembayaran = $pembayaran;
+            $penjualan->kembalian = $kembalian;
             $penjualan->jenis = $request->jenis;
             $penjualan->jenis_bank = $request->jenis_bank;
             if ($request->jenis == 'transfer' && $request->bank_id) {
@@ -87,12 +95,12 @@ class PenjualanController extends Controller
                     $penjualan->bank_atas_nama = $bank->atas_nama;
                 }
             }
-            $penjualan->biaya_pengiriman = $request->biaya_pengiriman;
+            $penjualan->biaya_pengiriman = $biaya_pengiriman;
             $penjualan->keterangan = $request->keterangan;
             $penjualan->is_tukar_tambah = $request->has('is_tukar_tambah') ? 1 : 0;
             if ($request->has('is_tukar_tambah')) {
                 $penjualan->nama_barang_tukar_tambah = $request->nama_barang_tukar_tambah;
-                $penjualan->harga_tukar_tambah = $request->harga_tukar_tambah;
+                $penjualan->harga_tukar_tambah = $harga_tukar_tambah;
                 $penjualan->keterangan_tukar_tambah = $request->keterangan_tukar_tambah;
             }
             if ($request->hasFile('bukti_transfer')) {
@@ -106,26 +114,27 @@ class PenjualanController extends Controller
         } else {
             $penjualan = new Penjualan;
             $penjualan->user_id = Auth::user()->id;
-            $penjualan->pelanggan_id = $request->pelanggan_id;
+            $penjualan->pelanggan_id = $pelanggan_id;
             $penjualan->no_invoice = $request->no_invoice;
-            $penjualan->total_pembayaran = $request->total_pembayaran;
-            $penjualan->sub_total = $request->sub_total;
-            $penjualan->pembayaran = $request->pembayaran;
-            $penjualan->kembalian = $request->kembalian;
+            $penjualan->total_pembayaran = $total_pembayaran;
+            $penjualan->sub_total = $sub_total;
+            $penjualan->pembayaran = $pembayaran;
+            $penjualan->kembalian = $kembalian;
             $penjualan->jenis = $request->jenis;
             $penjualan->keterangan = $request->keterangan;
             $penjualan->is_tukar_tambah = $request->has('is_tukar_tambah') ? 1 : 0;
             if ($request->has('is_tukar_tambah')) {
                 $penjualan->nama_barang_tukar_tambah = $request->nama_barang_tukar_tambah;
-                $penjualan->harga_tukar_tambah = $request->harga_tukar_tambah;
+                $penjualan->harga_tukar_tambah = $harga_tukar_tambah;
                 $penjualan->keterangan_tukar_tambah = $request->keterangan_tukar_tambah;
             }
             $penjualan->save();
 
             $hutang = new Hutang;
-            $hutang->pelanggan_id = $request->pelanggan_id;
+            $hutang->user_id = Auth::user()->id;
+            $hutang->pelanggan_id = $pelanggan_id;
             $hutang->no_invoice = $request->no_invoice;
-            $hutang->sub_total = $request->sub_total;
+            $hutang->sub_total = $sub_total;
             $hutang->save();
 
             return redirect('/penjualan/' . no_invoice())->with('print_struk', $penjualan->id)->with('success', 'Transaksi Berhasil Disimpan');

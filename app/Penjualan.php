@@ -25,6 +25,10 @@ class Penjualan extends Model
         'biaya_pengiriman',
         'bukti_transfer',
         'keterangan',
+        'is_tukar_tambah',
+        'nama_barang_tukar_tambah',
+        'harga_tukar_tambah',
+        'keterangan_tukar_tambah',
     ];
 
     public function user()

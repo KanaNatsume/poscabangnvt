@@ -62,6 +62,9 @@ class UserController extends Controller
         if ($request->has('editGajiPokok')) {
             $user->gaji_pokok = str_replace('.', '', $request->editGajiPokok);
         }
+        if ($request->filled('editPassword')) {
+            $user->password = \Illuminate\Support\Facades\Hash::make($request->editPassword);
+        }
         $user->save();
         return redirect('/user')->with('success', 'Data user berhasil terupdate');
     }

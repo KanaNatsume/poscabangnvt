@@ -163,6 +163,10 @@
                                 required>
                         </div>
                         <div class="form-group">
+                            <label for="editPassword">Ubah Password <small class="text-danger">(Kosongkan jika tidak ingin diubah)</small></label>
+                            <input type="text" name="editPassword" class="form-control form-control-sm" id="editPassword" placeholder="Masukkan password baru">
+                        </div>
+                        <div class="form-group">
                             <label for="editRole">Role</label>
                             <select name="editRole" class="form-control form-control-sm" id="editRole" required>
                                 <option value="kasir">Kasir (Bisa akses POS Penjualan)</option>
@@ -201,6 +205,7 @@
             $('#editEmail').val(email);
             $('#editRole').val(role);
             $('#editGajiPokok').val(gaji);
+            $('#editPassword').val('');
         });
 
         // Format Rupiah
